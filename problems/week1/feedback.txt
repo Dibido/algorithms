@@ -1,0 +1,8 @@
+1.1) Some answers are not specific enough (number of elements is an integer, e.g. 25 is not the same as 2*10).
+ This also means that you should round down, since rounding up would mean you need a bit more time than 1 min (even if it is a little).
+ Also, some answers are calculations not executed, which isn't a valid answer.
+1.3) g(1) is not 1, since g(n)=2^n, which would be 2.
+With the base case you would obtain 1<2. Then try to proof for n+1 while assuming that n is correct (IH) 
+1.5)
+b) You can't say anything about the size, since the complexity is specified by length n (otherwise all algorithms would have the same best case of O(1)).
+Note: Great use of Latex! I like it a lot :) For the correct BigO in Latex, use \mathcal{O}, and try to use \cdot for multiplication instead of the asterisk, which is used for the convolution operation.

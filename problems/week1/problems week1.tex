@@ -38,21 +38,21 @@ c) $ f=\Theta(g) $
 
 d) $ f=\Omega(g) $
 
-e) $ f=O(g) $
+e) $ f=\mathcal{O}(g) $
 
-f) $ f=O(g) $
+f) $ f=\mathcal{O}(g) $
 
 g) $ f=\Theta(g) $
 
-h) $ f=O(g) $
+h) $ f=\mathcal{O}(g) $
 
 \subsection{}
 
-$ n \in O(2^{n}) $
+$ n \in \mathcal{O}(2^{n}) $
 
 $ N_{0} = 1,\ c\ =\ 1$
 
-$ f(1) \leq 1 * g(1)\ for\ all\ n \geq N_{0} $
+$ f(1) \leq 1 \cdot g(1)\ for\ all\ n \geq N_{0} $
 
 $ f(1)\ =\ 1, g(1)\ =\ 1 $
 
@@ -60,26 +60,26 @@ $ f(2)\ =\ 2, g(2)\ =\ 4 $
 
 $ thus\ for\ all\ n\ > N_{0},\ g(n)\ \geq\ f(n) $
 
-$ f(n) \leq c * g(n) $
+$ f(n) \leq c \cdot g(n) $
 
-$ f(n) = O(g) $
-
-\subsection{}
-
-a) The worst case is O(n), if the element to find is not in the array.
-
-b) The best case is O(1), if the element to find is the first element in the array.
+$ f(n) = \mathcal{O}(g) $
 
 \subsection{}
 
-a) The worst case is $O(n^{2})$.
+a) The worst case is $\mathcal{O}(n)$, if the element to find is not in the array.
 
-b) The best case is O(1), when there is only one element in the array.
+b) The best case is $\mathcal{O}(1)$, if the element to find is the first element in the array.
 
-When there are more elements the best case is $O(n^{2})$.
+\subsection{}
 
-c) There is no way to improve an algorithm with complexity O(1).
+a) The worst case is $\mathcal{O}(n^{2})$.
 
-We can improve the complexity of the case $O(n^{2})$ by first checking whether the array is already sorted in a for loop. This would give a complexity of O(n).
+b) The best case is $\mathcal{O}(1)$, when there is only one element in the array.
+
+When there are more elements the best case is $\mathcal{O}(n^{2})$.
+
+c) There is no way to improve an algorithm with complexity $\mathcal{O}(1)$.
+
+We can improve the complexity of the case $\mathcal{O}(n^{2})$ by first checking whether the array is already sorted in a for loop. This would give a complexity of $\mathcal{O}(n)$.
 
 \end{document}
