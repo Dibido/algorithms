@@ -109,7 +109,7 @@
 
 Using this knowledge we can define that a vertex which is a universal sink has a link to all vertices except for itself.\\
 
-The algorithm to find a universal sink is as follows:\\ we go through every vertex and go from left to right through the rows, the row needs to have only zeroes.\\ So if we encounter a 1 on a row we go to the next row. If this row has only zeroes to the right we have a probable vertex for our universal sinkhole.\\ To be sure we check that this vertex has no other zeroes in its column.\\
+The algorithm to find a universal sink is as follows:\\ We go through every vertex and go from left to right through the rows, the row needs to have only zeroes to be a universal sink.\\ So if we encounter a 1 on a row we go to the next row. If this row has only zeroes to the right we have a probable vertex for our universal sink.\\ To be sure we check that this vertex has no other zeroes in its column.\\
 
 For example, in the above matrix we go start at index 1,1 and see that it is a 0, so we go to the right. We then encounter a 1. In this case index 1 is not an option for the universal sink.\\
 After this we go to the next row  and check for zeroes. We then find out that index 2 is an option for the universal sink.\\
@@ -124,7 +124,7 @@ To find out if it is connected to every vertex we need to check the vertices whi
 
 If we can fill the row in this way we have found a mother vertex.\\
 
-Alternative: Run DFS for every vertex, if all other nodes are black and the starting node is still gray, then the starting node must be a mother vertex.
+Alternatively we can run DFS for every vertex in G, if all other nodes are black and the starting node is still gray, then the starting node must be a mother vertex.\\
 	
 	\subparagraph*{3.5}\
 	
