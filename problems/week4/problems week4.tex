@@ -1,0 +1,38 @@
+\documentclass[]{article}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[T1]{fontenc} %use different encoding (copy from pdf is now possible}
+\usepackage{fullpage} %small margins
+\usepackage{color}
+\definecolor{light-gray}{gray}{0.95}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\lstset{
+	numbers=left,
+	breaklines=true,
+	backgroundcolor=\color{light-gray},
+	tabsize=4,
+	literate={\ \ }{{\ }}1
+}
+
+%opening
+\title{Problem session 3}
+\author{Dibran Dokter 1047390}
+
+\begin{document}
+	
+	\maketitle
+	
+	\section*{4}
+	
+	\subsection*{4.1}
+	
+	To sort the array in a way such that we get the Min-heap we first take the root (first element in the array) and put that at the end of our new array.
+	After this we append the left and the right children of this node to the front of this array. We do this for all the children of the original array.
+	
+	
+\end {document}
