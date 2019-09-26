@@ -1,6 +1,5 @@
 \documentclass[]{article}
 \usepackage{mathtools}
-\usepackage{tikz}
 \usepackage{listings}
 \usepackage{enumitem}
 \usepackage{amsmath}
@@ -9,6 +8,8 @@
 \usepackage[T1]{fontenc} %use different encoding (copy from pdf is now possible}
 \usepackage{fullpage} %small margins
 \usepackage{color}
+\usepackage{graphicx}
+\usepackage{float}
 \definecolor{light-gray}{gray}{0.95}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 \lstset{
@@ -31,8 +32,60 @@
 	
 	\subsection*{4.1}
 	
-	To sort the array in a way such that we get the Min-heap we first take the root (first element in the array) and put that at the end of our new array.
-	After this we append the left and the right children of this node to the front of this array. We do this for all the children of the original array.
+	To sort the array in a way such that we get the Min-heap we first take the root (first element in the array) and put that at the end of our new array. So that the highest value is at the end.\\
+	Then for all children of the child of the first node we check which is the highest and we append that at the front of the array.\\
+	We do this for all the children of the original array.
 	
+	\subsection*{4.2}
+	
+	1)
+	
+	\begin{figure}[H]
+		\includegraphics[scale=0.2]{/home/owner/git/algorithms/problems/week4/images/heap1.jpeg}
+	\end{figure}
+	
+	2)
+	
+	\begin{figure}[H]
+		\includegraphics[scale=0.2]{/home/owner/git/algorithms/problems/week4/images/heap2.jpeg}
+	\end{figure}
+
+	\subsection*{4.3}
+	
+	\begin{tabular}{|c|c|c|c|c|c|c|}
+		
+		\hline
+		Q: & 0 & 1 & 2 & 3 & 4 & 5\\
+		\hline\hline
+		& 0 & 30 & 40 & $\infty$ & $\infty$ & $\infty$ \\
+		\hline
+		&&& 40 & 50 & 80 & $\infty$\\
+		\hline
+		&&&& 50 & 70 & $\infty$\\
+		\hline
+		&&&&& 70 & 110\\
+		\hline
+		
+	\end{tabular}
+	
+	\subsection*{4.4}
+	
+	The following graph will not find the shortest path since the theoretical shortest path is $-\infty$.\\
+	 This is caused by the loop from B -> D that has a negative weight. In this case it will try to find the shortest path by looping through this loop infinitely many times.
+	
+	\begin{figure}[H]
+		\includegraphics[scale=0.1]{/home/owner/git/algorithms/problems/week4/images/dijkstra1.jpeg}
+	\end{figure}
+
+	\subsection*{4.5}
+	In this case we can create a Graph with the airports as vertices and the distance between them as weights for the edges.\\
+	When we have obtained this graph we can run dijkstra's algorithm to get the shortest path from our source vertex $s$ to all other vertices in the graph.\\
+	In this case this also gives the values for $easiest$.
+	
+	\subsection*{4.6}
+	
+	
+	
+	\subsection*{4.7}
 	
 \end {document}
