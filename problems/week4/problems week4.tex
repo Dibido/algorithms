@@ -22,7 +22,7 @@
 
 %opening
 \title{Problem session 3}
-\author{Dibran Dokter 1047390}
+\author{Dibran Dokter 1047390 \& Marnix Lukasse 1047400}
 
 \begin{document}
 	
@@ -34,20 +34,23 @@
 	
 	To sort the array in a way such that we get the Min-heap we first take the root (first element in the array) and put that at the end of our new array. So that the highest value is at the end.\\
 	Then for all children of the child of the first node we check which is the highest and we append that at the front of the array.\\
-	We do this for all the children of the original array.
+	We do this for all the children of the original array.\\
+	This algorithm takes $\mathcal(O)(?)$.\\
+	
+	Alternatively we can sort the array from the lowest value to the highest value. This however takes $\mathcal(O)(n?)$.
 	
 	\subsection*{4.2}
 	
 	1)
 	
 	\begin{figure}[H]
-		\includegraphics[scale=0.2]{/home/owner/git/algorithms/problems/week4/images/heap1.jpeg}
+		\includegraphics[scale=0.1]{/home/owner/git/algorithms/problems/week4/images/heap1.jpeg}
 	\end{figure}
 	
 	2)
 	
 	\begin{figure}[H]
-		\includegraphics[scale=0.2]{/home/owner/git/algorithms/problems/week4/images/heap2.jpeg}
+		\includegraphics[scale=0.1]{/home/owner/git/algorithms/problems/week4/images/heap2.jpeg}
 	\end{figure}
 
 	\subsection*{4.3}
@@ -84,8 +87,16 @@
 	
 	\subsection*{4.6}
 	
-	
+	To solve this problem we first run Dijkstra with the chosen $v$ as the source node. This will give us the shortest path from $v$ to all other vertices.\\
+	Then we run Dijkstra for all the other vertices and note the shortest path from every vertex to $v$. ?(Kan misschien sneller?)\\
+	After this we can add those paths to get the shortest path from any chosen vertex to any other vertex via $v$.\\
+	The complexity of this algorithm is $|V| \cdot |V|^2 = |V|^3$ when using arrays.\\
+	This complexity can be improved to $|V| \cdot |E|+|V| lg |V|$ when using a Fibonacci heap.
 	
 	\subsection*{4.7}
+	
+	To solve this problem we need to find the edge $e$ between the cities $s$ and $t$ such that $e$ has the biggest impact on the length of the shortest path from $s$ to $t$.\\
+	We can run Dijkstra's algorithm on the graph with the source node set to $s$ and find the shortest path to $t$.\\
+	Then we find the longest edge along this path. This edge is the road that needs to be improved to shorten the path from $s$ to $t$ the most.
 	
 \end {document}
