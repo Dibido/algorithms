@@ -32,25 +32,29 @@
 	
 	\subsection*{4.1}
 	
-	To sort the array in a way such that we get the Min-heap we first take the root (first element in the array) and put that at the end of our new array. So that the highest value is at the end.\\
-	Then for all children of the child of the first node we check which is the highest and we append that at the front of the array.\\
-	We do this for all the children of the original array.\\
-	This algorithm takes $\mathcal(O)(?)$.\\
+	We can transform a array that represents a max-heap into a array representing a mini-heap by following process:\\
 	
-	Alternatively we can sort the array from the lowest value to the highest value. This however takes $\mathcal(O)(n?)$.
+	For each (initially) non-leaf node $N$, starting at the first non-leaf node moving towards the root of the tree (index in array = $\floor{n/2}-1$ where n is number of nodes/array length):\\
 	
+	Check which of its child nodes is the lowest, swap places with that node. Now check if node N has any child nodes, and if so: is any of these child nodes lower then $N$? If so, swap places with that node.
+	Keep continuing this process until node $N$ has no more conflicting child nodes (regarding the min-heap property).\\
+	
+	After this is done for all initial non-leaf nodes, the array/tree should be a min-heap. The complexity of this process is $\mathcal{O}(n \cdot \log(n))$, namely for 0.5 of the nodes we have to start swapping down levels (in worst case swapping $\log(n)$ times, as $\log(n)$ is the number of levels in the tree).\\
+	For some reason we are able to reduce this $\mathcal{O}(n\ \dot log \ n)$ complexity to $\mathcal{O}(n)$ by doing some math, the professor showed this in the lecture.\\
+	
+	\newpage
 	\subsection*{4.2}
 	
 	1)
 	
 	\begin{figure}[H]
-		\includegraphics[scale=0.1]{/home/owner/git/algorithms/problems/week4/images/heap1.jpeg}
+		\includegraphics[scale=0.15]{/home/owner/git/algorithms/problems/week4/images/heap1.jpeg}
 	\end{figure}
 	
 	2)
 	
 	\begin{figure}[H]
-		\includegraphics[scale=0.1]{/home/owner/git/algorithms/problems/week4/images/heap2.jpeg}
+		\includegraphics[scale=0.15]{/home/owner/git/algorithms/problems/week4/images/heap2.jpeg}
 	\end{figure}
 
 	\subsection*{4.3}
@@ -81,22 +85,37 @@
 	\end{figure}
 
 	\subsection*{4.5}
-	In this case we can create a Graph with the airports as vertices and the distance between them as weights for the edges.\\
-	When we have obtained this graph we can run dijkstra's algorithm to get the shortest path from our source vertex $s$ to all other vertices in the graph.\\
-	In this case this also gives the values for $easiest$.
+	We can use a slightly altered version of Dijkstra for this problem, lets call it Dijkstra*. With Dijkstra* you do the normal Dijkstra routine, but you don't just keep track of the distance cost to a certain node, you add the number of hops needed to reach that distance.\\
+	Normally if Dijkstra finds a different route to a node, it checks 'This route cost < Known route cost?' With Dijkstra* this check would become: '(This route cost < Known route cost) OR ((This route cost == known route cost) AND (This route number hops < known route hops)).\\
+	If this check is true, then the cost/hop info should be updated. If we do Dijkstra* for every vertex, we can collect all the easiest arrays by looking at the hop counts.\\
+	
+	There might be optimizations possible so we don't have to run the full Dijkstra* for every vertex. If the graph is undirected, we could use the information we already know. For example,
+	if we already did Dijkstra* with node A as starting point, and easiest A->B turned out to be 2, we can already fill in this hop count of 2 for Dijkstra* with B as starting point and we don't have
+	to actually check any routes from B to A, we already know the shortest one is with hop count 2.\\
 	
 	\subsection*{4.6}
 	
 	To solve this problem we first run Dijkstra with the chosen $v$ as the source node. This will give us the shortest path from $v$ to all other vertices.\\
-	Then we run Dijkstra for all the other vertices and note the shortest path from every vertex to $v$. ?(Kan misschien sneller?)\\
+	Then we run Dijkstra for all the other vertices and note the shortest path from every vertex to $v$.\\
 	After this we can add those paths to get the shortest path from any chosen vertex to any other vertex via $v$.\\
 	The complexity of this algorithm is $|V| \cdot |V|^2 = |V|^3$ when using arrays.\\
 	This complexity can be improved to $|V| \cdot |E|+|V| lg |V|$ when using a Fibonacci heap.
 	
 	\subsection*{4.7}
 	
-	To solve this problem we need to find the edge $e$ between the cities $s$ and $t$ such that $e$ has the biggest impact on the length of the shortest path from $s$ to $t$.\\
-	We can run Dijkstra's algorithm on the graph with the source node set to $s$ and find the shortest path to $t$.\\
-	Then we find the longest edge along this path. This edge is the road that needs to be improved to shorten the path from $s$ to $t$ the most.
+	We can solve this problem using the following algorithm:\\
+	Network of roads G = (V,E)\\
+
+	\begin{lstlisting}[mathescape=true]	
+	For each r in list:
+	{
+		Include r in a copy of G
+		Run dijkstra from starting point s 
+	}
+	\end{lstlisting}
+	
+	Then you are able to compare the results, and check in which version the cost (from s) to t is the lowest. The extra road r in this version is the best to build if the goal is to minimize cost s->t\\
+	
+	Note that we assumed that a road is undirected, if the roads are directed then we should run Dijkstra from both s as starting point and t. Then take the average of these results or something to see what extra road gives us the best overall improvement.\\
 	
 \end {document}
