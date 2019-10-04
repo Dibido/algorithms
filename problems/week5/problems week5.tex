@@ -95,20 +95,23 @@
 	\subsection*{5.6}
 	
 	1)
+	It wasn't entirely clear to us whether we should find the single route with the most throughput, or if we are allowed to use multiple routes simultaneously. We assumed the latter was the case.
+	
 	This problem corresponds to a maximum flow problem. Thus we can use algorithms that find the maximum flow through a graph. In this case we can use Ford-Faulkerson to solve this problem.
 	
 	2)
-	We were unsure if we needed to find only one path from S to T and optimize that or that we needed to find the maximum flow via more than one path. In the end we assumed that we need to find the maximal flow.
-	
-	To get the maximal flow we ran the Ford-Faulkerson algorithm and came to the following residual graph:
+	To get the maximal flow we ran the Ford-Faulkerson algorithm and came to the following final residual graph:
 	
 	\begin{figure}[H]
 		\includegraphics[scale=0.3]{/home/owner/git/algorithms/problems/week5/images/residualgraph2.jpeg}
 	\end{figure}
 	
 	3)
-	From the above residual graph we can see that the maximal bit rate is 9.
-	The route that enables this is also seen in the residual graph.
+	From the above residual graph we can see that the maximal bit rate is 9 Mbit/s, using 4 different routes simultaneously:\\
+	- 2 Mbit/s S -> A -> D -> T\\
+	- 5 Mbit/s S -> B -> T\\
+	- 1 Mbit/S S -> B -> D -> T\\
+	- 1 Mbit/s S -> C -> B -> D -> T\\
 	
 	
 \end {document}
