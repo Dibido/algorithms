@@ -62,7 +62,7 @@
 	
 	After doing this version of BFS (which is linear), we have a look at our given SPT, and for each edge (starting from all leaves going upwards) we do the following check: Lets say we have vertex B in SPT with predecessor A, then we have a look at BFS and check whether A exists in the list of predecessors of B. If this is case, then that edge in the SPT does not conflict with our BFS results. We do this for all edges in the SPT, if there are no conflicts in any of the edges we can say that given SPT is indeed a correct SPT for the given graph.
 	
-	Since BFS = $mathcal{O}(|V| + |E|)$ this algorithm is linear. 
+	Since BFS = $\mathcal{O}(|V| + |E|)$ this algorithm is linear. 
 	
 	\subsection*{5.4}
 	
@@ -74,11 +74,27 @@
 		\includegraphics[scale=0.3]{/home/owner/git/algorithms/problems/week5/images/graph1.jpeg}
 	\end{figure}
 
-	In this graph the shortest path in the original graph is A->B->D. When we add a constant (in this case 2) the shortest path becomes A->D. This is incorrect. This is because the path can have an uneven amount of edges. Thus we add more to the bottom path than the upper path.
+	In this graph the shortest path in the original graph is A->B->D. When we add a constant (in this case 2) the shortest path becomes A->D. This is incorrect. This is because the path can have a larger amount of edges. Thus we add more to the bottom path than the upper path.
 	
 	\subsection*{5.5}
 	
-	Because our residual graphs for the steps were rather messy we have redrawn the final residual graph so that it was actually readable.
+	Because our residual graphs for the steps were rather\subsection*{5.6}
+	
+	1)
+	This problem corresponds to a maximum flow problem. Thus we can use algorithms that find the maximum flow through a graph. In this case we can use Ford-Faulkerson to solve this problem.
+	
+	2)
+	We were unsure if we needed to find only one path from S to T and optimize that or that we needed to find the maximum flow via more than one path. In the end we assumed that we need to find the maximal flow.
+	
+	To get the maximal flow we ran the Ford-Faulkerson algorithm and came to the following residual graph:
+	
+	\begin{figure}[H]
+		\includegraphics[scale=0.3]{/home/owner/git/algorithms/problems/week5/images/residualgraph2.jpeg}
+	\end{figure}
+	
+	3)
+	From the above residual graph we can see that the maximal bit rate is 9.
+	The route that enables this is also seen in the residual graph. messy we have redrawn the final residual graph so that it was actually readable.
 	
 	Residual graph:
 	\begin{figure}[H]
