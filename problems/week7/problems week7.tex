@@ -40,7 +40,7 @@
 	
 	\subsection*{7.2}
 	
-	We can use the following for $f(n): f(n) = f(n-1) + f(n-2) \cdot f(1) + f(n-3) * f(2)\ ...$. We dot his until f(n-1) reaches f(0).\\
+	We can use the following for $f(n): f(n) = f(n-1) + f(n-2) \cdot f(1) + f(n-3) * f(2)\ ...$. We do this until f(n-1) reaches f(0).\\
 	
 	When we do this for $f(6)$ then we get $f(6) = f(5) + f(4) \cdot f(1) + f(3) \cdot f(2) + f(2) \cdot f(3) + f(1) \cdot f(4) + f(0) \cdot f(5)$.\\
 
@@ -96,7 +96,7 @@
 	\subsection*{7.6}
 	
 	To prove this we need to realize there is only one parent pointer that is NIL. Namely the root node.\\
-	For all the other nodes we either have 2 NIL values for the children or only One. But when they have only one NIL then the other node will have 2 NIL at some point in the tree because they will become a leaf node.
+	For all the other nodes we either have 2 NIL values for the children or only one. But when they have only one NIL then the other node will have 2 NIL at some point in the tree because they will become a leaf node.
 	
 	Thus we can have 1 for the root node + 2 for every leaf node and + 1 for every node with only one NIL.\\ This added up is n+2. Since we have 1 for the root node and n+1 for the remaining nodes.
 	
