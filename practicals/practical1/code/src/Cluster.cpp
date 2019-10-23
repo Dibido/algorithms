@@ -1,6 +1,6 @@
 #include "Cluster.h"
 
-Cluster::Cluster()
+Cluster::Cluster() : mMaxLength(-1)
 {
 }
 
@@ -15,12 +15,17 @@ void Cluster::addNode(Node aNode)
 
 void Cluster::setMaxLength(int aMaxLength)
 {
-    mMaxLength = aMaxLength;
+    mMaxLength = aMaxLength;    
 }
 
 void Cluster::setMiddleNode(Node aNode)
 {
     mMiddleNode = aNode;
+}
+
+Node& Cluster::getMiddleNode()
+{
+    return mMiddleNode;
 }
 
 std::vector<Node> Cluster::getNodes() const
@@ -31,4 +36,9 @@ std::vector<Node> Cluster::getNodes() const
 int Cluster::getMaxLength() const
 {
     return mMaxLength;
+}
+
+bool Cluster::operator==(Cluster& aCluster)
+{
+    return mMiddleNode == aCluster.getMiddleNode();
 }

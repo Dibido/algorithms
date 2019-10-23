@@ -1,5 +1,6 @@
 #include <vector>
 #include <queue>
+#include <cmath>
 
 #include "Cluster.h"
 
@@ -22,12 +23,12 @@ class Solver
         /**
          *
          */
-        Cluster findLongestCluster(std::vector<Cluster> aClusters);
+        Cluster findLongestCluster(std::vector<Cluster>& aClusters);
 
         /**
          * 
          */
-        int getClusterLength(Cluster aCluster);
+        int getClusterLength(Cluster& aCluster);
 
         /**
          * 
