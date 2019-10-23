@@ -16,9 +16,6 @@ Solver::Solver(std::pair <int, std::vector<std::pair<int, int>>> aNodeList)
         mNodes.at(aPair.first).addNeighbour(&mNodes.at(aPair.second));
         mNodes.at(aPair.second).addNeighbour(&mNodes.at(aPair.first));
     }
-    // Find clusters
-    mClusters = findClusters(mNodes);
-    std::cout << mClusters.size() << std::endl;
 }
 
 std::vector<Cluster> Solver::findClusters(std::vector<Node> aNodes)
@@ -69,8 +66,98 @@ Solver::~Solver()
 
 int Solver::compute()
 {
-    // Create new connections
+    // Find clusters
+    mClusters = findClusters(mNodes);
 
+    // Find the longest cluster
+    Cluster lLongestCluster = findLongestCluster(mClusters);
+
+    // Find the center of the cluster
+    lLongestCluster.setMiddleNode(findMiddleNode(lLongestCluster));
+
+    // For the remaining clusters:
+    // Find the center of the cluster
+    // Connect it to the center of the biggest cluster
     // Find the longest path in the remaining cluster
     return 0;
+}
+
+Cluster Solver::findLongestCluster(std::vector<Cluster> aClusters)
+{
+    Cluster lLongestCluster = aClusters.at(0);
+    for(auto lCluster : aClusters)
+    {
+        if (getClusterLength(lCluster) > lLongestCluster.getMaxLength())
+        {
+            lLongestCluster = lCluster;
+        }
+    }
+    std::cout << "LongestLength : " << lLongestCluster.getMaxLength() << std::endl;
+    return lLongestCluster;
+}
+
+int Solver::getClusterLength(Cluster aCluster)
+{
+    int lClusterLength = 0;
+    // Find the leaf nodes
+    std::queue<Node> lLeafQueue;
+    for(auto lNode : aCluster.getNodes())
+    {
+        if(lNode.getNeighbours().size() == 1)
+        {
+            lLeafQueue.push(lNode);       
+        }
+    }
+    while(!lLeafQueue.empty())
+    {
+        // Run the dijkstra algorithm
+        int lLongestPath = findLongestPath(lLeafQueue.front());
+        if (lLongestPath > lClusterLength)
+        {
+            lClusterLength = lLongestPath;
+        }
+        lLeafQueue.pop();
+    }
+    aCluster.setMaxLength(lClusterLength);
+    return lClusterLength;
+}
+
+int Solver::findLongestPath(Node aNode)
+{
+    int lLongestPath = 0;
+    for (auto lNeighbour : aNode.getNeighbours())
+    {
+        lNeighbour->removeNeighbour(&aNode);
+        lLongestPath = std::max(lLongestPath, findLongestPath(*lNeighbour));
+    }
+    return lLongestPath + 1;
+}
+
+
+/**
+// Utility function that will return the depth 
+// of the tree 
+int depthOfTree(struct Node *ptr) 
+{ 
+    // Base case 
+    if (!ptr) 
+        return 0; 
+  
+    int maxdepth = 0; 
+  
+    // Check for all children and find 
+    // the maximum depth 
+    for (vector<Node*>::iterator it = ptr->child.begin(); 
+                           it != ptr->child.end(); it++) 
+  
+        maxdepth = max(maxdepth , depthOfTree(*it)); 
+  
+    return maxdepth + 1; 
+}
+
+*/
+
+Node Solver::findMiddleNode(Cluster aCluster)
+{
+    return aCluster.getNodes().at(0);
 }

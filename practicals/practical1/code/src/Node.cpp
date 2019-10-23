@@ -17,6 +17,11 @@ Node::~Node()
 {
 }
 
+const bool Node::operator==(const Node& aNode)
+{
+    return mId == aNode.getId();
+}
+
 void Node::printNode()
 {
     std::cout << "Id : " << mId << std::endl;
@@ -34,6 +39,17 @@ void Node::addNeighbour(Node* aNode)
 std::vector <Node*> Node::getNeighbours()
 {
     return mNeighbours;
+}
+
+void Node::removeNeighbour(Node* aNode)
+{
+    for(int i = 0; i < mNeighbours.size(); i++)
+    {
+        if(mNeighbours.at(i)->getId() == aNode->getId())
+        {
+            mNeighbours.erase(mNeighbours.begin()+i);
+        }
+    } 
 }
 
 int Node::getId() const
