@@ -8,6 +8,25 @@ Node::Node(int aNodeId) : mId(aNodeId)
 {
 }
 
+Node::Node(const Node& aNode)
+{
+    mId = aNode.getId();
+    for(auto& lNeighbour : aNode.getNeighbours())
+    {
+        mNeighbours.push_back(lNeighbour);
+    }
+}
+
+ Node& Node::operator=( const Node& aNode ) {
+    mId = aNode.getId();
+    mNeighbours.clear();
+    for(auto& lNeighbour : aNode.getNeighbours())
+    {
+        mNeighbours.push_back(lNeighbour);
+    }
+    return *this;
+  }
+
 void Node::setNodeId(const int aNodeId)
 {
     mId = aNodeId;
@@ -33,10 +52,14 @@ void Node::printNode()
 
 void Node::addNeighbour(Node* aNode)
 {
-    mNeighbours.push_back(aNode);
+    // Does not exist yet.
+    if(std::find (mNeighbours.begin(), mNeighbours.end(), aNode) == mNeighbours.end())
+    {
+        mNeighbours.push_back(aNode);
+    }
 }
 
-std::vector <Node*> Node::getNeighbours()
+std::vector <Node*> Node::getNeighbours() const
 {
     return mNeighbours;
 }

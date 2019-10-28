@@ -10,6 +10,6 @@ int main(int argc, char** argv)
     std::pair <int, std::vector<std::pair<int, int>>> lConfiguration = lParser.Parse();
     Solver lSolver(lConfiguration);
     int lSolution = lSolver.compute();
-    std::cout << lSolution << std::endl;
+    std::cout << "Solution : " << lSolution << std::endl;
     return 0;
 }

@@ -33,7 +33,7 @@ class Solver
         /**
          * 
          */
-        int findLongestPath(Node aNode);
+        std::vector<Node> findLongestPath(Node aNode);
 
         /**
          * 
@@ -41,6 +41,13 @@ class Solver
         Node findMiddleNode(Cluster aCluster);
 
     private:
+
+        enum COLOR
+        {
+            WHITE,
+            BLACK,
+            GREY
+        };
         int mNumberOfNodes;
         std::vector<Node> mNodes;
         std::vector<Cluster> mClusters;

@@ -13,12 +13,16 @@ class Node
         
         void printNode();
         void addNeighbour(Node* aNode);
-        std::vector <Node*> getNeighbours();
+        std::vector <Node*> getNeighbours() const;
         void removeNeighbour(Node* aNode);
 
         int getId() const;
 
         const bool operator==(const Node& aNode);
+
+        Node(const Node& aNode);
+
+        Node& operator=(const Node& aNode);
 
     private:
 

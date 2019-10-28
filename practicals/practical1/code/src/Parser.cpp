@@ -24,6 +24,7 @@ std::pair <int, std::vector<std::pair<int, int>>> Parser::Parse()
     //Check whether the right amount of arguments were given
     if(std::distance(lRit,lrEnd) != 2){
         std::cout << "Wrong input for number of values on line 1" << std::endl;
+        std::cout << "Output :" << lLine << std::endl;
         exit(-1);
     }
     std::string lNodes = lRit->str();
