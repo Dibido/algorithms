@@ -33,12 +33,12 @@ class Solver
         /**
          * 
          */
-        std::vector<Node> findLongestPath(Node aNode);
+        int findLongestPath(Node aNode);
 
         /**
          * 
          */
-        Node findMiddleNode(Cluster aCluster);
+        // Node findMiddleNode(Cluster aCluster);
 
     private:
 

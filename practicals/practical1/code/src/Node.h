@@ -18,7 +18,7 @@ class Node
 
         int getId() const;
 
-        const bool operator==(const Node& aNode);
+        bool operator==(const Node& aNode) const;
 
         Node(const Node& aNode);
 

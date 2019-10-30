@@ -31,7 +31,7 @@ void Cluster::setMiddleNode(Node aNode)
     }
 }
 
-void Cluster::setLongestPath (const std::vector<Node>& aLongestPath)
+void Cluster::setLongestPath (const int aLongestPath)
 {
     mLongestPath = aLongestPath;
 }
@@ -41,7 +41,7 @@ Node& Cluster::getMiddleNode()
     return mMiddleNode;
 }
 
-std::vector<Node>& Cluster::getNodes()
+const std::vector<Node>& Cluster::getNodes() const
 {
     return mNodes;
 }
@@ -51,12 +51,12 @@ int Cluster::getMaxLength() const
     return mMaxLength;
 }
 
-bool Cluster::operator==(const Cluster& aCluster)
+bool Cluster::operator==(const Cluster& aCluster) const
 {
-    return mMiddleNode == aCluster.mMiddleNode;
+    return mNodes == aCluster.getNodes();
 }
 
-std::vector<Node> Cluster::getLongestPath() const
+int Cluster::getLongestPath() const
 {
   return mLongestPath;
 }

@@ -36,7 +36,7 @@ Node::~Node()
 {
 }
 
-const bool Node::operator==(const Node& aNode)
+bool Node::operator==(const Node& aNode) const
 {
     return mId == aNode.getId();
 }
@@ -52,11 +52,7 @@ void Node::printNode()
 
 void Node::addNeighbour(Node* aNode)
 {
-    // Does not exist yet.
-    if(std::find (mNeighbours.begin(), mNeighbours.end(), aNode) == mNeighbours.end())
-    {
-        mNeighbours.push_back(aNode);
-    }
+    mNeighbours.push_back(aNode);
 }
 
 std::vector <Node*> Node::getNeighbours() const

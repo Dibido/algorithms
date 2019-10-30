@@ -11,19 +11,19 @@ class Cluster
         void addNode(Node& aNode);
         void setMaxLength(int aMaxLength);
         void setMiddleNode (Node aNode);
-        void setLongestPath (const std::vector<Node>& aLongestPath);
+        void setLongestPath (const int aLongestPath);
         Node& getMiddleNode();
-        std::vector<Node>& getNodes();
+        const std::vector<Node>& getNodes() const;
         int getMaxLength() const;
-        std::vector<Node> getLongestPath() const;
+        int getLongestPath() const;
 
-        bool operator==(const Cluster& aCluster);
+        bool operator==(const Cluster& aCluster) const;
 
     private:
         // All the nodes in the cluster.
         std::vector<Node> mNodes;
         // The longest path in the cluster.
-        std::vector<Node> mLongestPath;
+        int mLongestPath;
         // The length of the longest path.
         int mMaxLength;
         // The middle node of the longest path.
