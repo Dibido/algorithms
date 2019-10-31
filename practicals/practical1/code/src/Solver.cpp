@@ -2,6 +2,7 @@
 #include <tuple>
 #include <chrono>
 #include <thread>
+#include <map>
 
 Solver::Solver(std::pair <int, std::vector<std::pair<int, int>>> aNodeList)
 {
@@ -106,7 +107,7 @@ int Solver::compute()
     // Remove the longest cluster
     mClusters.erase(std::remove(mClusters.begin(), mClusters.end(), lLongestCluster), mClusters.end());
 
-    int lLongestPathSize = lLongestCluster.getLongestPath();
+    int lLongestPathSize = lLongestCluster.getLongestPathSize();
     std::cout << "lLOngestPtahSize :" << lLongestPathSize << std::endl;
 
     //Evenly sized longest path
@@ -116,7 +117,7 @@ int Solver::compute()
         for(auto& lCluster : mClusters)
         {
             // If there is a cluster of equal size
-            if(lCluster.getLongestPath() == lLongestPathSize)
+            if(lCluster.getLongestPathSize() == lLongestPathSize)
             {
                 lNumberOfHits++;
             }
@@ -137,7 +138,7 @@ int Solver::compute()
             int lHalfSize = lLongestPathSize / 2;
             for(auto& lCluster : mClusters)
             {
-                if(lCluster.getLongestPath() >= lHalfSize)
+                if(lCluster.getLongestPathSize() >= lHalfSize)
                 {
                     return lLongestPathSize + 1;
                 }
@@ -155,7 +156,7 @@ int Solver::compute()
         std::cout << "ClustersSize :" << mClusters.size() << std::endl;
         for(auto& lCluster : mClusters)
         {
-            if(lCluster.getLongestPath() >= lHalfSize)
+            if(lCluster.getLongestPathSize() >= lHalfSize)
             {
                 lNumberOfHits++;
                 std::cout << "lNumberOfHits :" << lNumberOfHits << std::endl;
@@ -179,12 +180,12 @@ Cluster Solver::findLongestCluster(std::vector<Cluster>& aClusters)
     for(Cluster& lCluster : aClusters)
     {
         std::cout << "FindingLongestPathinCluster" << std::endl;
-        if (getClusterLength(lCluster) > lLongestCluster.getMaxLength())
+        if (getClusterLength(lCluster) > lLongestCluster.getLongestPathSize())
         {
             lLongestCluster = lCluster;
         }
     }
-    std::cout << "LongestLength : " << lLongestCluster.getMaxLength() << std::endl;
+    std::cout << "LongestLength : " << lLongestCluster.getLongestPathSize() << std::endl;
     return lLongestCluster;
 }
 
@@ -193,33 +194,121 @@ int Solver::getClusterLength(Cluster& aCluster)
     int lClusterLength = 0;
     // Find the leaf nodes
     std::queue<Node> lLeafQueue;
-    for(auto& lNode : aCluster.getNodes())
-    {
-        std::cout << "getNode : " << lNode.getId() << std::endl;
-        if(lNode.getNeighbours().size() == 1)
-        {
-            lLeafQueue.push(lNode);
-        }
-        else if(lNode.getNeighbours().size() == 0)
-        {
-            aCluster.setLongestPath(1);
-        }
-    }
     
-    while(!lLeafQueue.empty())
-    {
-        std::cout << "LeafQueue : " << lLeafQueue.size() << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        int lLongestPath = findLongestPath(lLeafQueue.front());
-        if (lLongestPath > lClusterLength)
-        {
-            lClusterLength = lLongestPath;
-            aCluster.setLongestPath(lLongestPath);
-        }
-        lLeafQueue.pop();
-    }
-    aCluster.setMaxLength(lClusterLength);
+    Node lFirstNode = aCluster.getFirstNode();
+
+    std::cout << "before fLP executed " << std::endl;
+    lClusterLength = findLongestPath(lFirstNode, aCluster.getNumberOfNodes());  
+    std::cout << "after fLP executed " << std::endl;
+    
+    aCluster.setLongestPathSize(lClusterLength);
+    
     return lClusterLength;
+}
+
+int Solver::findLongestPath(Node aNode, int aClusterSize)
+{
+  // Key will be node id, distance distance from aNode.
+  std::map<Node*, int> lDistances;
+  lDistances.insert(std::make_pair(&aNode, 1));
+  std::cout << "startFLP, inserting node: " << aNode.getId() << " dist: 1 " << std::endl;
+
+  std::queue<Node*> lQueue;
+  lQueue.push(&aNode);
+  
+  std::cout << "A" << std::endl;
+
+  while(!lQueue.empty())
+  {
+    Node* lNode = lQueue.front();
+    lQueue.pop();
+
+    std::cout << "In while queue not empty" << std::endl;
+    for(auto& lNeighbour : lNode->getNeighbours())
+    {
+      printf("Address of lNode is %p\n", (void *)lNode);  
+      printf("Address of lNeighbour is %p\n", (void *)lNeighbour);  
+      std::cout << "In for each neighbour mainNode(" << lNode->getId() << "), neighbour: " << lNeighbour->getId() << std::endl;
+      // Node not processed earlier
+      auto lIt = std::find_if(lDistances.begin(), lDistances.end(), [&lNeighbour](const auto& lElem) {return lNeighbour->getId() == lElem.first->getId();});
+      if(lIt == lDistances.end())
+      {
+        std::cout << "Adding node to queue" << std::endl;
+        lDistances.insert(std::make_pair(lNeighbour, lDistances[lNode] + 1));
+        lQueue.push(lNeighbour);
+      }
+     // std::find_if(myVector.begin(), myVector.end(), 
+       //   [&toFind] (const auto &ele) { return ele.m_id == toFind.m_id}; );
+     // list<S>::iterator it = find_if(l.begin(), l.end(), [] (const S& s) { return s.S1 == 0; } );
+    }
+
+    std::cout << "After loop through neighbours" << std::endl;
+  }
+
+  int lHighestDistance = -1;
+  Node* lFurthestNode = nullptr;
+
+  for(auto lIt = lDistances.begin(); lIt != lDistances.end(); lIt++)
+  {
+    if(lIt->second > lHighestDistance)
+    {
+      lHighestDistance = lIt->second;
+      lFurthestNode = lIt->first;
+    }
+  }
+
+  std::cout << "Before clearing lDistances: " << std::endl;
+  for(auto const& lPair : lDistances)
+  {
+    std::cout << "Node: " << lPair.first->getId() << " dist: " << lPair.second << std::endl;
+  }
+  
+  lDistances.clear();
+
+  std::cout << "Inserting this in an empty lDistances : ID= " << lFurthestNode->getId() << ", dist=1" << std::endl;
+  lDistances.insert(std::make_pair(lFurthestNode, 1));
+  lQueue.push(lFurthestNode);
+
+  while(!lQueue.empty())
+  {
+    Node* lNode = lQueue.front();
+    lQueue.pop();
+
+    for(auto& lNeighbour : lNode->getNeighbours())
+    {
+      std::cout << "2nd while, for lNeighbour (ID: " << lNeighbour->getId() << ")" << std::endl;
+      // Node not processed earlier
+      auto lIt = std::find_if(lDistances.begin(), lDistances.end(), [&lNeighbour](const auto& lElem) {return lNeighbour->getId() == lElem.first->getId();});
+      if(lIt == lDistances.end())
+      {
+        std::cout << "2nd while !queue.empty, adding this in lDistances: <ID: " << lNeighbour->getId() << ", Dist: " << lDistances[lNode] + 1 << std::endl;
+        lDistances.insert(std::make_pair(lNeighbour, lDistances[lNode] + 1));
+
+        lQueue.push(lNeighbour);
+      }
+    }
+  }
+
+  std::cout << "after 2nd while queue: " << std::endl;
+  for(auto const& lPair : lDistances)
+  {
+    std::cout << "Node: " << lPair.first->getId() << " dist: " << lPair.second << std::endl;
+  }
+
+  lHighestDistance = 0;
+
+  Node* lNode = nullptr;
+  for(auto lIt = lDistances.begin(); lIt != lDistances.end(); lIt++)
+  {
+    if(lIt->second > lHighestDistance)
+    {
+      lHighestDistance = lIt->second;
+      lNode = lIt->first;
+    }
+  }
+
+  std::cout << "Returning lHighestDistance: " << lHighestDistance << "for node with ID: " << lNode->getId() << std::endl;
+  return lHighestDistance;
 }
 
 // DFS
@@ -316,6 +405,7 @@ int Solver::getClusterLength(Cluster& aCluster)
 //     return lLongestPath;
 // }
 
+/**
 int Solver::findLongestPath(Node aNode)
 {
     std::cout << "aNODEID" << aNode.getId() << std::endl;
@@ -349,7 +439,7 @@ int Solver::findLongestPath(Node aNode)
     }
     std::cout << "LongestPath from Node : " << aNode.getId() << " = " << lLongestPathLength << std::endl;
     return lLongestPathLength;
-}
+}*/
 
 // std::vector<Node> Solver::findLongestPath(Node aNode)
 // {

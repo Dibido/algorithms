@@ -1,6 +1,6 @@
 #include "Cluster.h"
 
-Cluster::Cluster() : mMaxLength(-1)
+Cluster::Cluster() : mLongestPathSize(-1)
 {
 }
 
@@ -11,11 +11,6 @@ Cluster::~Cluster()
 void Cluster::addNode(Node& aNode)
 {
     mNodes.push_back(aNode);
-}
-
-void Cluster::setMaxLength(int aMaxLength)
-{
-    mMaxLength = aMaxLength;    
 }
 
 void Cluster::setMiddleNode(Node aNode)
@@ -31,9 +26,9 @@ void Cluster::setMiddleNode(Node aNode)
     }
 }
 
-void Cluster::setLongestPath (const int aLongestPath)
+void Cluster::setLongestPathSize (const int aLongestPath)
 {
-    mLongestPath = aLongestPath;
+    mLongestPathSize = aLongestPath;
 }
 
 Node& Cluster::getMiddleNode()
@@ -46,17 +41,27 @@ const std::vector<Node>& Cluster::getNodes() const
     return mNodes;
 }
 
-int Cluster::getMaxLength() const
-{
-    return mMaxLength;
-}
-
 bool Cluster::operator==(const Cluster& aCluster) const
 {
     return mNodes == aCluster.getNodes();
 }
 
-int Cluster::getLongestPath() const
+int Cluster::getLongestPathSize() const
 {
-  return mLongestPath;
+  return mLongestPathSize;
+}
+
+int Cluster::getNumberOfNodes() const
+{
+  return mNodes.size();
+}
+
+Node Cluster::getFirstNode() const
+{
+  if(mNodes.size() == 0)
+  {
+    throw std::logic_error("mNodes has no sizes, can't get first node");
+  }
+
+  return mNodes.at(0);
 }
