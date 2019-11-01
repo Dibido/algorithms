@@ -230,16 +230,14 @@ int Solver::findLongestPath(Node aNode, int aClusterSize)
       printf("Address of lNeighbour is %p\n", (void *)lNeighbour);  
       std::cout << "In for each neighbour mainNode(" << lNode->getId() << "), neighbour: " << lNeighbour->getId() << std::endl;
       // Node not processed earlier
-      auto lIt = std::find_if(lDistances.begin(), lDistances.end(), [&lNeighbour](const auto& lElem) {return lNeighbour->getId() == lElem.first->getId();});
+      auto lIt = lDistances.find(lNeighbour);
+      //auto lIt = std::find_if(lDistances.begin(), lDistances.end(), [&lNeighbour](const auto& lElem) {return lNeighbour->getId() == lElem.first->getId();});
       if(lIt == lDistances.end())
       {
         std::cout << "Adding node to queue" << std::endl;
         lDistances.insert(std::make_pair(lNeighbour, lDistances[lNode] + 1));
         lQueue.push(lNeighbour);
       }
-     // std::find_if(myVector.begin(), myVector.end(), 
-       //   [&toFind] (const auto &ele) { return ele.m_id == toFind.m_id}; );
-     // list<S>::iterator it = find_if(l.begin(), l.end(), [] (const S& s) { return s.S1 == 0; } );
     }
 
     std::cout << "After loop through neighbours" << std::endl;
@@ -278,7 +276,8 @@ int Solver::findLongestPath(Node aNode, int aClusterSize)
     {
       std::cout << "2nd while, for lNeighbour (ID: " << lNeighbour->getId() << ")" << std::endl;
       // Node not processed earlier
-      auto lIt = std::find_if(lDistances.begin(), lDistances.end(), [&lNeighbour](const auto& lElem) {return lNeighbour->getId() == lElem.first->getId();});
+      auto lIt = lDistances.find(lNeighbour);
+      //auto lIt = std::find_if(lDistances.begin(), lDistances.end(), [&lNeighbour](const auto& lElem) {return lNeighbour->getId() == lElem.first->getId();});
       if(lIt == lDistances.end())
       {
         std::cout << "2nd while !queue.empty, adding this in lDistances: <ID: " << lNeighbour->getId() << ", Dist: " << lDistances[lNode] + 1 << std::endl;
