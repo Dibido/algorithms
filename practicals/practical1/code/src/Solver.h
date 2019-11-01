@@ -33,7 +33,7 @@ class Solver
         /**
          * 
          */
-        int findLongestPath(Node aNode);
+        int findLongestPath(Node aNode, int aClusterSize);
 
         /**
          * 
