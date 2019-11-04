@@ -15,9 +15,11 @@ class Cluster
         const std::vector<Node>& getNodes() const;
         int getLongestPathSize() const;
         int getNumberOfNodes() const;
-        Node getFirstNode() const;
+        Node& getFirstNode();
 
         bool operator==(const Cluster& aCluster) const;
+
+        Cluster(const Cluster& aCluster);
 
     private:
         // All the nodes in the cluster.

@@ -23,21 +23,41 @@ Solver::Solver(std::pair <int, std::vector<std::pair<int, int>>> aNodeList)
         mNodes.at(aPair.first).addNeighbour(&mNodes.at(aPair.second));
         mNodes.at(aPair.second).addNeighbour(&mNodes.at(aPair.first));
     }
+
+    for(auto& lNode : mNodes)
+    {
+      printf("Node %i has adress %p and neighbours: \n", lNode.getId(), (void *)&lNode); 
+      for(auto& lNeighbour : lNode.getNeighbours())
+      {
+        printf("Node %i with adress %p\n", lNeighbour->getId(), (void *)lNeighbour); 
+      }
+      std::cout << std::endl;
+    }
+
+    //while(true);
 }
 
-std::vector<Cluster> Solver::findClusters(std::vector<Node> aNodes)
+std::vector<Cluster> Solver::findClusters(std::vector<Node>& aNodes)
 {
     std::cout << "begin findClusters" << std::endl;
 
     std::vector<Cluster> lClusters;
-    std::vector<std::pair<int,bool>> lNodeList; //used for finding the clusters, int for the id and bool for if the 
+    std::vector<std::pair<int,bool>> lNodeList; //used for finding the clusters, int for the id and bool for if it has been added to a cluster
     // Put all the nodes in the nodelist
-    for(auto lNode : aNodes)
+    for(auto& lNode : aNodes)
     {
         lNodeList.push_back(std::pair<int, bool>(lNode.getId(), false)); // By default not in a cluster
     }
 
     std::cout << "Added all nodes to lNodeList " << std::endl;
+
+
+    std::cout << "Adresses &aNodes.(i): " << std::endl;
+    for(int i = 0; i < aNodes.size(); i++)
+    {
+      printf("Node with ID %i has address %p \n", aNodes.at(i).getId(), &aNodes.at(i));
+    }
+    std::cout << std::endl; 
 
     // Check the neighbours for every node and add them to a cluster
     for (int i = 0; i < lNodeList.size(); i++)
@@ -53,11 +73,35 @@ std::vector<Cluster> Solver::findClusters(std::vector<Node> aNodes)
             std::vector<Node*> lNeighbours = aNodes.at(i).getNeighbours();
             while(!lNodeQueue.empty())
             {
+                std::cout << "Queue contains: " << std::endl;
+
+
+               std::queue<Node*> lTemp = lNodeQueue; //copy the original queue to the temporary queue
+
+              while (!lTemp.empty())
+              {
+                  auto lElement = lTemp.front();
+                  printf("Node %i has address %p \n", lElement->getId(), (void*)lElement);
+                  lTemp.pop();
+              } 
+              std::cout << "End queue contains" << std::endl;
+
+                std::cout << std::endl;
                 Node* lCurrentNode = lNodeQueue.front();
                 lNodeQueue.pop();
                 // Mark the node as handled
                 lNodeList.at(lCurrentNode->getId()).second = true;
                 lCluster.addNode(*lCurrentNode);
+                printf("ADD node %i with address %p to lCluster", lCurrentNode->getId(), (void*)lCurrentNode);
+                std::cout << std::endl;
+
+                for(auto& lNode : lCluster.getNodes())
+                {
+                  printf("lNode %i with address %p in lCluster", lNode.getId(), (void*)&lNode);
+                  std::cout << std::endl;
+                }
+
+                std::cout << std::endl;
                 for(auto lNeighbour : lCurrentNode->getNeighbours())
                 {
                     // Node has not been seen yet
@@ -67,9 +111,36 @@ std::vector<Cluster> Solver::findClusters(std::vector<Node> aNodes)
                     }
                 }
             }
+
+            std::cout << "=== BEFORE lClusters.push_back(lCluster) ==="<< std::endl;
+        for(auto& lNode : lCluster.getNodes())
+          {
+            printf("Node %i has adress %p and neighbours: \n", lNode.getId(), (void *)&lNode); 
+            for(auto& lNeighbour : lNode.getNeighbours())
+            {
+              printf("Node %i with adress %p\n", lNeighbour->getId(), (void *)lNeighbour); 
+            }
+            std::cout << std::endl;
+          }
             lClusters.push_back(lCluster);
+            std::cout << "=== AFTER lClusters.push_back(lCluster) ===" << std::endl;
         }
     }
+
+    std::cout << "== Just before end of findClusters == "  << std::endl;
+
+    for(auto& lNode : lClusters.at(0).getNodes())
+    {
+      printf("Node %i has adress %p and neighbours: \n", lNode.getId(), (void *)&lNode); 
+      for(auto& lNeighbour : lNode.getNeighbours())
+      {
+        printf("Node %i with adress %p\n", lNeighbour->getId(), (void *)lNeighbour); 
+      }
+      std::cout << std::endl;
+    }
+    
+    std::cout << "== End of findClusters == " << std::endl;
+
     return lClusters;
 }
 
@@ -79,8 +150,22 @@ Solver::~Solver()
 
 int Solver::compute()
 {
+    std::cout << "begin compute" << std::endl;
     // Find clusters
     mClusters = findClusters(mNodes);
+
+    for(auto& lCluster : mClusters)
+    {
+    for(auto& lNode : lCluster.getNodes())
+    {
+      printf("Node %i has adress %p and neighbours: \n", lNode.getId(), (void *)&lNode); 
+      for(auto& lNeighbour : lNode.getNeighbours())
+      {
+        printf("Node %i with adress %p\n", lNeighbour->getId(), (void *)lNeighbour); 
+      }
+      std::cout << std::endl;
+    }
+    }
 
     std::cout << "FoundClusters =============" << std::endl;
 
@@ -176,6 +261,21 @@ int Solver::compute()
 
 Cluster Solver::findLongestCluster(std::vector<Cluster>& aClusters)
 {
+  std::cout << "findLC" << std::endl;
+  for(auto& lCluster : aClusters)
+  {
+    for(auto& lNode : lCluster.getNodes())
+    {
+      printf("ID: %i, Address of lNode is %p and neighbours adresses:\n", lNode.getId(), (void *)&lNode); 
+      for(auto& lNeighbour : lNode.getNeighbours())
+      {
+        printf("ID: %i, Address of lNeighbour is %p\n", lNeighbour->getId(), (void *)&lNeighbour); 
+
+      }
+    }
+  }
+
+
     Cluster lLongestCluster = aClusters.at(0);
     for(Cluster& lCluster : aClusters)
     {
@@ -192,13 +292,19 @@ Cluster Solver::findLongestCluster(std::vector<Cluster>& aClusters)
 int Solver::getClusterLength(Cluster& aCluster)
 {
     int lClusterLength = 0;
-    // Find the leaf nodes
-    std::queue<Node> lLeafQueue;
     
-    Node lFirstNode = aCluster.getFirstNode();
+    std::cout << "Begin GCL " << std::endl;
+
+    for(auto& lNode : aCluster.getNodes())
+    {
+      printf("Address of lNode is %p\n", (void *)&lNode); 
+    }
+    std::cout << std::endl;
+
+    Node& lFirstNode = aCluster.getFirstNode();
 
     std::cout << "before fLP executed " << std::endl;
-    lClusterLength = findLongestPath(lFirstNode, aCluster.getNumberOfNodes());  
+    lClusterLength = findLongestPath(&lFirstNode, aCluster.getNumberOfNodes());  
     std::cout << "after fLP executed " << std::endl;
     
     aCluster.setLongestPathSize(lClusterLength);
@@ -206,15 +312,20 @@ int Solver::getClusterLength(Cluster& aCluster)
     return lClusterLength;
 }
 
-int Solver::findLongestPath(Node aNode, int aClusterSize)
+int Solver::findLongestPath(Node* aNode, int aClusterSize)
 {
+  if(aNode == nullptr)
+  {
+    throw std::logic_error("aNode is a nullptr");
+  }
+
   // Key will be node id, distance distance from aNode.
   std::map<Node*, int> lDistances;
-  lDistances.insert(std::make_pair(&aNode, 1));
-  std::cout << "startFLP, inserting node: " << aNode.getId() << " dist: 1 " << std::endl;
+  lDistances.insert(std::make_pair(aNode, 1));
+  std::cout << "startFLP, inserting node: " << aNode->getId() << " dist: 1 " << std::endl;
 
   std::queue<Node*> lQueue;
-  lQueue.push(&aNode);
+  lQueue.push(aNode);
   
   std::cout << "A" << std::endl;
 

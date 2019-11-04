@@ -18,7 +18,7 @@ class Solver
         /**
          *
          */
-        std::vector<Cluster> findClusters(std::vector<Node> aNodes);
+        std::vector<Cluster> findClusters(std::vector<Node>& aNodes);
         
         /**
          *
@@ -33,7 +33,7 @@ class Solver
         /**
          * 
          */
-        int findLongestPath(Node aNode, int aClusterSize);
+        int findLongestPath(Node* aNode, int aClusterSize);
 
         /**
          * 
