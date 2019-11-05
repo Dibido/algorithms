@@ -31,7 +31,7 @@ std::pair <int, std::vector<std::pair<int, int>>> Parser::Parse()
     int lNumberOfNodes = std::stoi(lNodes);
     ++lRit;
     std::string lEdges = lRit->str();
-    int lNumberOfEdges = std::stoi(lEdges);
+  
     // Create the nodes
     std::pair <int, std::vector<std::pair<int, int>>> lNodeVector;
     std::vector<std::pair<int,int>> lConnections;

@@ -44,7 +44,7 @@ bool Node::operator==(const Node& aNode) const
 void Node::printNode()
 {
     std::cout << "Id : " << mId << std::endl;
-    for(int i = 0; i < mNeighbours.size(); i++)
+    for(unsigned int i = 0; i < mNeighbours.size(); i++)
     {
         std::cout << "\t" << mId << " - " << mNeighbours.at(i)->mId << std::endl;
     }
@@ -62,7 +62,7 @@ std::vector <Node*> Node::getNeighbours() const
 
 void Node::removeNeighbour(Node* aNode)
 {
-    for(int i = 0; i < mNeighbours.size(); i++)
+    for(unsigned int i = 0; i < mNeighbours.size(); i++)
     {
         if(mNeighbours.at(i)->getId() == aNode->getId())
         {

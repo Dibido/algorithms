@@ -33,7 +33,7 @@ std::vector<Cluster> Solver::findClusters(std::vector<Node>& aNodes)
     }
 
     // Check the neighbours for every node and add them to a cluster
-    for (int i = 0; i < lNodeList.size(); i++)
+    for (unsigned int i = 0; i < lNodeList.size(); i++)
     {
         // If not yet in cluster
         if(!lNodeList.at(i).second)
@@ -64,16 +64,6 @@ std::vector<Cluster> Solver::findClusters(std::vector<Node>& aNodes)
             lClusters.push_back(lCluster);
         }
     }
-    int j = 0;
-    for(auto& lC : lClusters)
-    {
-      std::cout << "nodeCount: " << lC.getNodes().size() << std::endl;
-      if(lC.getNodes().size() == 2)
-      {
-        j++;
-      }
-    }
-    std::cout << "J: " << j <<std::endl;
     return lClusters;
 }
 
@@ -159,10 +149,6 @@ Cluster Solver::findLongestCluster(std::vector<Cluster>& aClusters)
     Cluster lLongestCluster = aClusters.at(0);
     for(Cluster& lCluster : aClusters)
     {
-      if(lCluster.getNodes().size() != getClusterLength(lCluster))
-      {
-        std::cout << "lCluster with node " << lCluster.getFirstNode()->getId() << " has a total of " << lCluster.getNodes().size() << " nodes, and longest path: " << getClusterLength(lCluster) << std::endl;
-      }
         if (getClusterLength(lCluster) > lLongestCluster.getLongestPathSize())
         {
             lLongestCluster = lCluster;
@@ -177,14 +163,14 @@ int Solver::getClusterLength(Cluster& aCluster)
 
     Node* lFirstNode = aCluster.getFirstNode();
 
-    lClusterLength = findLongestPath(lFirstNode, aCluster.getNumberOfNodes());  
+    lClusterLength = findLongestPath(lFirstNode);  
     
     aCluster.setLongestPathSize(lClusterLength);
     
     return lClusterLength;
 }
 
-int Solver::findLongestPath(Node* aNode, int aClusterSize)
+int Solver::findLongestPath(Node* aNode)
 {
   if(aNode == nullptr)
   {
@@ -253,13 +239,11 @@ int Solver::findLongestPath(Node* aNode, int aClusterSize)
 
   lHighestDistance = 0;
 
-  Node* lNode = nullptr;
   for(auto lIt = lDistances.begin(); lIt != lDistances.end(); lIt++)
   {
     if(lIt->second > lHighestDistance)
     {
       lHighestDistance = lIt->second;
-      lNode = lIt->first;
     }
   }
 
