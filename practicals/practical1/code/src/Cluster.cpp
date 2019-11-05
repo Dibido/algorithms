@@ -8,29 +8,14 @@ Cluster::~Cluster()
 {
 }
 
-void Cluster::addNode(Node& aNode)
+void Cluster::addNode(Node* aNode)
 {
-    printf("ADDING node(%i, %p) \n", aNode.getId(), &aNode);
     mNodes.push_back(aNode);
-    printf("After add, in mNodes its node(%i, %p) \n", mNodes.at(mNodes.size()-1).getId(), &(mNodes.at(mNodes.size()-1)));
-    
-    for(auto& lNeighbour : mNodes.at(mNodes.size()-1).getNeighbours())
-    {
-      printf("lNEIGH: %i , %p \n", lNeighbour->getId(), (void*)lNeighbour);
-    }
 }
 
 void Cluster::setMiddleNode(Node aNode)
 {
     mMiddleNode = aNode;
-
-    for(auto& lNode : mNodes)
-    {
-        if(lNode.getId() == aNode.getId())
-        {
-            lNode = aNode;
-        }
-    }
 }
 
 void Cluster::setLongestPathSize (const int aLongestPath)
@@ -43,7 +28,7 @@ Node& Cluster::getMiddleNode()
     return mMiddleNode;
 }
 
-const std::vector<Node>& Cluster::getNodes() const
+const std::vector<Node*>& Cluster::getNodes() const
 {
     return mNodes;
 }
@@ -62,7 +47,6 @@ Cluster::Cluster(const Cluster& aCluster)
   {
     mNodes.push_back(lNode);
   }
-  std::cout << "Copy constructor CLUSTER used" << std::endl;
 }
 
 
@@ -76,7 +60,7 @@ int Cluster::getNumberOfNodes() const
   return mNodes.size();
 }
 
-Node& Cluster::getFirstNode()
+Node* Cluster::getFirstNode()
 {
   if(mNodes.size() == 0)
   {

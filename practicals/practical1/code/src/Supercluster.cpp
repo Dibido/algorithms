@@ -12,6 +12,7 @@ int main(int argc, char** argv)
     Solver lSolver(lConfiguration);
     std::cout << "Initiated lSolver" << std::endl;
     int lSolution = lSolver.compute();
+    std::cout << "Compute returns: " << lSolution << std::endl;
     // As our solver counts the number of nodes and we want the number of hops we do (-2)
     // When we have only one node we want to limit it to 0.
     lSolution = std::max(0, lSolution - 2);
