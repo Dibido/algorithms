@@ -13,7 +13,7 @@ class Node
         
         void printNode();
         void addNeighbour(Node* aNode);
-        std::vector <Node*> getNeighbours() const;
+        const std::vector <Node*>& getNeighbours() const;
         void removeNeighbour(Node* aNode);
 
         int getId() const;
