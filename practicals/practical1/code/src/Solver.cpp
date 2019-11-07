@@ -3,6 +3,7 @@
 #include <chrono>
 #include <thread>
 #include <map>
+#include <set>
 #include "Stopwatch.h"
 
 Solver::Solver(std::pair <int, std::vector<std::pair<int, int>>> aNodeList)
@@ -200,13 +201,14 @@ int Solver::findLongestPath(Node* aNode)
     throw std::logic_error("aNode is a nullptr");
   }
 
-  // Key will be node id, distance distance from aNode.
-  std::map<Node*, int> lDistances;
-  lDistances.insert(std::make_pair(aNode, 1));
+  std::set<Node*> lSeenNodes;
+  lSeenNodes.insert(aNode);
 
   std::queue<Node*> lQueue;
   lQueue.push(aNode);
 
+  Node* lFurthestNode = nullptr;
+
   while(!lQueue.empty())
   {
     Node* lNode = lQueue.front();
@@ -215,31 +217,27 @@ int Solver::findLongestPath(Node* aNode)
     for(auto& lNeighbour : lNode->getNeighbours())
     {
       // Node not processed earlier
-      if(lDistances.find(lNeighbour) == lDistances.end())
+      if(lSeenNodes.find(lNeighbour) == lSeenNodes.end())
       {
-        lDistances.insert(std::make_pair(lNeighbour, lDistances[lNode] + 1));
         lQueue.push(lNeighbour);
       }
     }
-  }
 
-  int lHighestDistance = -1;
-  Node* lFurthestNode = nullptr;
-
-  for(auto lIt = lDistances.begin(); lIt != lDistances.end(); lIt++)
-  {
-    if(lIt->second > lHighestDistance)
+    // If this is the last node processed with BFS, it is per definition a node with max distance to aNode.
+    if(lQueue.empty())
     {
-      lHighestDistance = lIt->second;
-      lFurthestNode = lIt->first;
+      lFurthestNode = lNode;
     }
   }
-  
-  lDistances.clear();
+
+  // Key will be node id, distance distance from aNode.
+  std::map<Node*, int> lDistances;
 
   lDistances.insert(std::make_pair(lFurthestNode, 1));
   lQueue.push(lFurthestNode);
 
+  // Will contain pointer to the end node of the longest path, starting from lFurthestNode
+  Node* lEndNode = nullptr;
   while(!lQueue.empty())
   {
     Node* lNode = lQueue.front();
@@ -255,17 +253,12 @@ int Solver::findLongestPath(Node* aNode)
         lQueue.push(lNeighbour);
       }
     }
-  }
 
-  lHighestDistance = 0;
-
-  for(auto lIt = lDistances.begin(); lIt != lDistances.end(); lIt++)
-  {
-    if(lIt->second > lHighestDistance)
+    if(lQueue.empty())
     {
-      lHighestDistance = lIt->second;
+      lEndNode = lNode;
     }
   }
 
-  return lHighestDistance;
+  return lDistances[lEndNode];
 }
