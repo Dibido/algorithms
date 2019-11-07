@@ -55,7 +55,7 @@ void Node::addNeighbour(Node* aNode)
     mNeighbours.push_back(aNode);
 }
 
-std::vector <Node*> Node::getNeighbours() const
+const std::vector <Node*>& Node::getNeighbours() const
 {
     return mNeighbours;
 }
