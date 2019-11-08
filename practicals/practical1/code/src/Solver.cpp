@@ -75,19 +75,19 @@ Solver::~Solver()
 
 int Solver::compute()
 {
-    //system_stopwatch lComputeWatch;
-    //std::cout << "Begin compute, time = 0" << std::endl;
+    system_stopwatch lComputeWatch;
+    std::cout << "Begin compute, time = 0" << std::endl;
     // Find clusters
     mClusters = findClusters(mNodes);
 
-    //unsigned int lTime1 = lComputeWatch.elapsed_time<unsigned int, std::chrono::microseconds>();
-    //std::cout << "After findclusters, MS since start compute: " << lTime1 << std::endl;
+    unsigned int lTime1 = lComputeWatch.elapsed_time<unsigned int, std::chrono::microseconds>();
+    std::cout << "After findclusters, MS since start compute: " << lTime1 << std::endl;
 
     // Find the longest cluster
     Cluster lLongestCluster = findLongestCluster(mClusters);
 
-    //unsigned int lTime2 = lComputeWatch.elapsed_time<unsigned int, std::chrono::microseconds>();
-    //std::cout << "After findLongestCluster(mClusters), MS since start compute: " << lTime2 << std::endl;
+    unsigned int lTime2 = lComputeWatch.elapsed_time<unsigned int, std::chrono::microseconds>();
+    std::cout << "After findLongestCluster(mClusters), MS since start compute: " << lTime2 << std::endl;
     
     // Remove the longest cluster
     mClusters.erase(std::remove(mClusters.begin(), mClusters.end(), lLongestCluster), mClusters.end());
@@ -166,7 +166,9 @@ Cluster Solver::findLongestCluster(std::vector<Cluster>& aClusters)
 
     for(Cluster& lCluster : aClusters)
     {
+      //std::cout << "gCL" << std::endl;
       int lClusterLength = getClusterLength(lCluster);
+      //std::cout << "gCL end" << std::endl;
 
       //lTime1 = lFindLongestStopwatch.elapsed_time<unsigned int, std::chrono::microseconds>();
       //std::cout << "Found clusterlength, time expired: " << lTime1 << std::endl;
@@ -187,8 +189,10 @@ int Solver::getClusterLength(Cluster& aCluster)
 
     Node* lFirstNode = aCluster.getFirstNode();
 
+    //std::cout << "flP" << std::endl;
     lClusterLength = findLongestPath(lFirstNode);  
-    
+    //std::cout << "flP end" << std::endl;
+
     aCluster.setLongestPathSize(lClusterLength);
     
     return lClusterLength;
@@ -200,9 +204,17 @@ int Solver::findLongestPath(Node* aNode)
   {
     throw std::logic_error("aNode is a nullptr");
   }
+  
+  system_stopwatch lWatch;
+  
+  
+  bool lSeen[1000000] {false};
+  
+  unsigned int lTime1 = lWatch.elapsed_time<unsigned int, std::chrono::microseconds>();
 
-  std::set<Node*> lSeenNodes;
-  lSeenNodes.insert(aNode);
+  std::cout << "Setting bool array costs ms: " << lTime1 << std::endl;
+
+  lSeen[aNode->getId()] = true;
 
   std::queue<Node*> lQueue;
   lQueue.push(aNode);
@@ -217,9 +229,10 @@ int Solver::findLongestPath(Node* aNode)
     for(auto& lNeighbour : lNode->getNeighbours())
     {
       // Node not processed earlier
-      if(lSeenNodes.find(lNeighbour) == lSeenNodes.end())
+      if(!lSeen[lNeighbour->getId()])
       {
         lQueue.push(lNeighbour);
+        lSeen[lNeighbour->getId()] = true;
       }
     }
 
@@ -227,6 +240,7 @@ int Solver::findLongestPath(Node* aNode)
     if(lQueue.empty())
     {
       lFurthestNode = lNode;
+      // std::cout << "First time lQueue.empty()" << std::endl;
     }
   }
 
