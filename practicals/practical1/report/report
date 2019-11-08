@@ -1,0 +1,9 @@
+This is our report for the first algorithms practical. We decided to create the algorithm for the first problem, the Raspberry Pi Supercluster.
+
+First we will go into the explanation of our algorithm. We begin by reading in the input, we first read the number of nodes and make that many nodes in a vector. After this we couple the nodes in the array using pointers. So node a get a pointer to node b and the other way around.
+After we have read the input and created our node list we start working towards the solution.
+Our first step is to find the nodes that make up a cluster and put them in a cluster which we in turn put into a list. We do this by creating a list of booleans to check whether a node has already been added to a cluster or not. Then we find all the neighbours for every node and add them to the cluster, and we do this recursively. In this way we build one cluster. We do this for every node while checking if the node has not yet been added to a cluster. This results in a list of clusters.
+After we have found all the clusters in the input we look for the longest cluster among them. To do this we find the length of the longest path in every cluster and return the cluster with the longest path.
+For finding the longest path we take a random node from the cluster and calculate the longest path from there using breadth-first search. Then we run breadth-first search again from the node that was at the end of the longest path. The longest path we get from this search is the longest path in the cluster. When we have the longest path we return the distance from the begin to the end node in the path.
+This approach works since we can look at the cluster of nodes as if it is a n-ary tree. In this case we need to find the diameter of the tree to find the longest path. 
+After we have found the longest cluster we remove it from the list of clusters, we do this because we wish to attach all the other clusters to it.
