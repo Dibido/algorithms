@@ -45,6 +45,10 @@
         "iterator": "cpp",
         "map": "cpp",
         "regex": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "chrono": "cpp",
+        "ratio": "cpp",
+        "set": "cpp",
+        "thread": "cpp"
     }
 }

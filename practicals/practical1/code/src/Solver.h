@@ -7,7 +7,7 @@
 class Solver
 {
     public:
-        Solver(std::pair <int, std::vector<std::pair<int, int>>> aNodeList);
+        Solver();
         virtual ~Solver();
         
         /**
@@ -33,7 +33,7 @@ class Solver
         /**
          * 
          */
-        int findLongestPath(Node* aNode);
+        int findLongestPath(Node* aNode, int aClusterSize);
 
     private:
 
