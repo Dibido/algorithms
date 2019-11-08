@@ -75,19 +75,19 @@ Solver::~Solver()
 
 int Solver::compute()
 {
-    system_stopwatch lComputeWatch;
-    std::cout << "Begin compute, time = 0" << std::endl;
+    //system_stopwatch lComputeWatch;
+    //std::cout << "Begin compute, time = 0" << std::endl;
     // Find clusters
     mClusters = findClusters(mNodes);
 
-    unsigned int lTime1 = lComputeWatch.elapsed_time<unsigned int, std::chrono::microseconds>();
-    std::cout << "After findclusters, MS since start compute: " << lTime1 << std::endl;
+    //unsigned int lTime1 = lComputeWatch.elapsed_time<unsigned int, std::chrono::microseconds>();
+    //std::cout << "After findclusters, MS since start compute: " << lTime1 << std::endl;
 
     // Find the longest cluster
     Cluster lLongestCluster = findLongestCluster(mClusters);
 
-    unsigned int lTime2 = lComputeWatch.elapsed_time<unsigned int, std::chrono::microseconds>();
-    std::cout << "After findLongestCluster(mClusters), MS since start compute: " << lTime2 << std::endl;
+    //unsigned int lTime2 = lComputeWatch.elapsed_time<unsigned int, std::chrono::microseconds>();
+    //std::cout << "After findLongestCluster(mClusters), MS since start compute: " << lTime2 << std::endl;
     
     // Remove the longest cluster
     mClusters.erase(std::remove(mClusters.begin(), mClusters.end(), lLongestCluster), mClusters.end());
@@ -156,20 +156,20 @@ Cluster Solver::findLongestCluster(std::vector<Cluster>& aClusters)
       throw std::out_of_range("aClusters in findLongestCluster is of invalid size 0");
     } 
     
-    system_stopwatch lFindLongestStopwatch;
-    unsigned int lTime1 = lFindLongestStopwatch.elapsed_time<unsigned int, std::chrono::microseconds>();
-    std::cout << "After parsing time used: " << lTime1 << std::endl;
+    //system_stopwatch lFindLongestStopwatch;
+    //unsigned int lTime1 = lFindLongestStopwatch.elapsed_time<unsigned int, std::chrono::microseconds>();
+    //std::cout << "After parsing time used: " << lTime1 << std::endl;
 
     Cluster lLongestCluster = aClusters.at(0);
 
-    std::cout << "Starting loop through clusters in findLongestCluster, time = 0" << std::endl;
+    //std::cout << "Starting loop through clusters in findLongestCluster, time = 0" << std::endl;
 
     for(Cluster& lCluster : aClusters)
     {
       int lClusterLength = getClusterLength(lCluster);
 
-      lTime1 = lFindLongestStopwatch.elapsed_time<unsigned int, std::chrono::microseconds>();
-      std::cout << "Found clusterlength, time expired: " << lTime1 << std::endl;
+      //lTime1 = lFindLongestStopwatch.elapsed_time<unsigned int, std::chrono::microseconds>();
+      //std::cout << "Found clusterlength, time expired: " << lTime1 << std::endl;
 
         if (lClusterLength > lLongestCluster.getLongestPathSize())
         {
@@ -177,7 +177,7 @@ Cluster Solver::findLongestCluster(std::vector<Cluster>& aClusters)
         }
     }
 
-    std::cout << "Done looping through clusters in findLongestCluster" << std::endl;
+    //std::cout << "Done looping through clusters in findLongestCluster" << std::endl;
     return lLongestCluster;
 }
 
