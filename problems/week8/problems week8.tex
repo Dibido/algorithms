@@ -1,0 +1,73 @@
+\documentclass[]{article}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[T1]{fontenc} %use different encoding (copy from pdf is now possible}
+\usepackage{fullpage} %small margins
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{float}
+\definecolor{light-gray}{gray}{0.95}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\lstset{
+	numbers=left,
+	breaklines=true,
+	backgroundcolor=\color{light-gray},
+	tabsize=4,
+	literate={\ \ }{{\ }}1
+}
+
+%opening
+\title{Problem session 8}
+\author{Dibran Dokter 1047390}
+
+\begin{document}
+	
+	\maketitle
+	
+	\section*{8}
+	
+	\subsection*{8.1}
+	
+	\begin{figure}[H]
+		\includegraphics[scale=0.3]{/home/owner/git/algorithms/problems/week8/images/redblack1.jpeg}
+	\end{figure}
+
+	\subsection*{8.2}
+	
+	\begin{figure}[H]
+		\includegraphics[scale=0.3]{/home/owner/git/algorithms/problems/week8/images/redblack2.jpeg}
+	\end{figure}
+
+	\begin{figure}[H]
+		\includegraphics[scale=0.15]{/home/owner/git/algorithms/problems/week8/images/redblack3.jpeg}
+	\end{figure}
+
+	\subsection*{8.3}
+	
+	Yes, this is the case. Since the only options we have is that there are black nodes under the root node since there should always be only black children from a red node. And if we make the root black this does not break the 5th property since the number of black nodes increases by 1 for every path so the difference in the amount of black nodes per path does not change.
+	
+	\subsection*{8.4}
+	
+	\begin{figure}[H]
+	\includegraphics[scale=0.15]{/home/owner/git/algorithms/problems/week8/images/blackcount2.jpeg}
+	\end{figure}
+	\begin{figure}[H]
+	\includegraphics[scale=0.15]{/home/owner/git/algorithms/problems/week8/images/blackcount3.jpeg}
+	\end{figure}
+	\begin{figure}[H]
+	\includegraphics[scale=0.15]{/home/owner/git/algorithms/problems/week8/images/blackcount4.jpeg}
+	\end{figure}
+
+	\subsection*{8.5}
+	
+	1. We need to color it black since it is the root node and the root node is always black.\\
+	2. We should leave it red since it is a leaf node, and it should not change the number of blacks in the path.\\
+	3. Since we insert into a red-black tree we know that in the original tree there are no two  red nodes in a row. If the parent and grandparent of the node are red there are two red nodes in a row, which cannot occur. If the parent node is red, it should have two black children, so because our parent is red, we have an uncle U that is black.\\
+	4. This we can show by looking at the maximal number of steps of the insert algorithm, and since we are always done in two steps this is the maximal number of steps it takes to get to a proper BST.\\
+	5. Since the root is always black in a BST, it depends on the color of the parent node what we do. If the parent is red we need to color it black, if the parent is black we can be either black or red. It depends on the left side of the parent, since the number of black nodes should be equal.
+	
+\end {document}
