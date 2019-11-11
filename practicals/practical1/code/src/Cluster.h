@@ -8,6 +8,7 @@ class Cluster
         Cluster();
         virtual ~Cluster();
 
+        void renumber();
         void addNode(Node* aNode);
         void setMiddleNode (Node aNode);
         void setLongestPathSize (const int aLongestPath);

@@ -8,6 +8,14 @@ Cluster::~Cluster()
 {
 }
 
+void Cluster::renumber()
+{
+  for (int i = 0; i < mNodes.size(); i++)
+  {
+    mNodes.at(i)->setNodeId(i);
+  }
+}
+
 void Cluster::addNode(Node* aNode)
 {
     mNodes.push_back(aNode);

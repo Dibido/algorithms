@@ -71,6 +71,8 @@ std::vector<Cluster> Solver::findClusters(std::vector<Node>& aNodes)
                     }
                 }
             }
+            
+            lCluster.renumber();
 
             lClusters.push_back(lCluster);
         }
@@ -158,12 +160,13 @@ int Solver::compute()
     }
 }
 
+
 Cluster Solver::findLongestCluster(std::vector<Cluster>& aClusters)
 {
     if(static_cast<int>(aClusters.size()) == 0)
     {
       throw std::out_of_range("aClusters in findLongestCluster is of invalid size 0");
-    } 
+    }
     
     //system_stopwatch lFindLongestStopwatch;
     //unsigned int lTime1 = lFindLongestStopwatch.elapsed_time<unsigned int, std::chrono::microseconds>();
@@ -172,9 +175,12 @@ Cluster Solver::findLongestCluster(std::vector<Cluster>& aClusters)
     Cluster lLongestCluster = aClusters.at(0);
 
     //std::cout << "Starting loop through clusters in findLongestCluster, time = 0" << std::endl;
-
+    
+    // int i = 0;
     for(Cluster& lCluster : aClusters)
     {
+    //   std::cout << "I: " << i << std::endl;
+    //   i++;
       //std::cout << "gCL" << std::endl;
       int lClusterLength = getClusterLength(lCluster);
       //std::cout << "gCL end" << std::endl;
@@ -209,6 +215,160 @@ int Solver::getClusterLength(Cluster& aCluster)
 }
 
 int Solver::findLongestPath(Node* aNode, int aClusterSize)
+{ 
+//   std::cout << "flp " << std::endl;
+  if(aNode == nullptr)
+  {
+    throw std::logic_error("aNode is a nullptr");
+  }
+
+  system_stopwatch lWatch;
+  
+  Node* lFurthestNode = nullptr;
+
+  std::queue<Node*> lQueue;
+
+  // There are two approaches, one is to use a map and the other uses an array sized with mNumberOfNodes.
+  // For small clusters (<32), for example a single node it is costly to initialize the array so we use the other approach.
+  // The extra complexity by using a map/set is still good overall for the small-sized clusters.
+//   int lMinNumberForArrayApproach = 32;
+
+//   if(aClusterSize > lMinNumberForArrayApproach)
+//   {
+    // std::cout << "aClusterSize : " << aClusterSize << std::endl;
+    bool lSeen[aClusterSize] {false};
+    unsigned int lTime1 = lWatch.elapsed_time<unsigned int, std::chrono::microseconds>();
+
+    // std::cout << "Setting bool array costs ms: " << lTime1 << std::endl;
+
+    lSeen[aNode->getId()] = true;
+
+    lQueue.push(aNode);
+
+    while(!lQueue.empty())
+    {
+        Node* lNode = lQueue.front();
+        lQueue.pop();
+
+        for(auto& lNeighbour : lNode->getNeighbours())
+        {
+        // Node not processed earlier
+        if(!lSeen[lNeighbour->getId()])
+        {
+            lQueue.push(lNeighbour);
+            lSeen[lNeighbour->getId()] = true;
+        }
+        }
+
+        // If this is the last node processed with BFS, it is per definition a node with max distance to aNode.
+        if(lQueue.empty())
+        {
+        lFurthestNode = lNode;
+        // std::cout << "First time lQueue.empty()" << std::endl;
+        }
+    }
+
+    int lDistances [aClusterSize] = {0};
+
+  lDistances[lFurthestNode->getId()] = 1;
+  lQueue.push(lFurthestNode);
+
+  // Will contain pointer to the end node of the longest path, starting from lFurthestNode
+  Node* lEndNode = nullptr;
+  while(!lQueue.empty())
+  {
+    Node* lNode = lQueue.front();
+    lQueue.pop();
+
+    for(auto& lNeighbour : lNode->getNeighbours())
+    {
+      // Node not processed earlier
+      if(lDistances[lNeighbour->getId()] == 0)
+      {
+        lDistances[lNeighbour->getId()] = lDistances[lNode->getId()] + 1;
+        lQueue.push(lNeighbour);
+      }
+    }
+
+    if(lQueue.empty())
+    {
+      lEndNode = lNode;
+    }
+  }
+
+  return lDistances[lEndNode->getId()];
+}
+/*  }
+  else
+  {
+    std::set<Node*> lSeenNodes;
+
+    unsigned int lTime1 = lWatch.elapsed_time<unsigned int, std::chrono::microseconds>();
+
+    // std::cout << "Setting bool array costs ms: " << lTime1 << std::endl;
+
+    lSeenNodes.insert(aNode);
+    
+    lQueue.push(aNode);
+
+    while(!lQueue.empty())
+    {
+        Node* lNode = lQueue.front();
+        lQueue.pop();
+
+        for(auto& lNeighbour : lNode->getNeighbours())
+        {
+        // Node not processed earlier
+        if(lSeenNodes.find(lNeighbour) == lSeenNodes.end())
+        {
+            lQueue.push(lNeighbour);
+            lSeenNodes.insert(lNeighbour);
+        }
+        }
+
+        // If this is the last node processed with BFS, it is per definition a node with max distance to aNode.
+        if(lQueue.empty())
+        {
+        lFurthestNode = lNode;
+        // std::cout << "First time lQueue.empty()" << std::endl;
+        }
+    }
+
+        // Key will be node id, distance distance from aNode.
+    std::map<Node*, int> lDistances;
+
+    lDistances.insert(std::make_pair(lFurthestNode, 1));
+    lQueue.push(lFurthestNode);
+
+    // Will contain pointer to the end node of the longest path, starting from lFurthestNode
+    Node* lEndNode = nullptr;
+    while(!lQueue.empty())
+    {
+        Node* lNode = lQueue.front();
+        lQueue.pop();
+
+        for(auto& lNeighbour : lNode->getNeighbours())
+        {
+        // Node not processed earlier
+        if(lDistances.find(lNeighbour) == lDistances.end())
+        {
+            lDistances.insert(std::make_pair(lNeighbour, lDistances[lNode] + 1));
+
+            lQueue.push(lNeighbour);
+        }
+        }
+
+        if(lQueue.empty())
+        {
+        lEndNode = lNode;
+        }
+    }
+  return lDistances[lEndNode];
+  }
+  
+}
+
+/*int Solver::findLongestPath(Node* aNode, int aClusterSize)
 {
   if(aNode == nullptr)
   {
@@ -224,9 +384,9 @@ int Solver::findLongestPath(Node* aNode, int aClusterSize)
   // There are two approaches, one is to use a map and the other uses an array sized with mNumberOfNodes.
   // For small clusters (<32), for example a single node it is costly to initialize the array so we use the other approach.
   // The extra complexity by using a map/set is still good overall for the small-sized clusters.
-  int lMinNumberForArrayApproach = 32;
+//   int lMinNumberForArrayApproach = 32;
 
-  if(aClusterSize > lMinNumberForArrayApproach)
+  /*if(aClusterSize > lMinNumberForArrayApproach)
   {
     bool lSeen[mNumberOfNodes] {false};
     unsigned int lTime1 = lWatch.elapsed_time<unsigned int, std::chrono::microseconds>();
@@ -356,4 +516,4 @@ int Solver::findLongestPath(Node* aNode, int aClusterSize)
     }
   return lDistances[lEndNode];
   }
-}
+}*/
