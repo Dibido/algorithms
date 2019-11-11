@@ -9,4 +9,4 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
-add_executable(Supercluster src/Supercluster.cpp src/Parser.cpp src/Node.cpp src/Solver.cpp src/Cluster.cpp src/Stopwatch.h)
+add_executable(Supercluster src/Supercluster.cpp src/Node.cpp src/Solver.cpp src/Cluster.cpp)

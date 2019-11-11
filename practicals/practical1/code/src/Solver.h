@@ -10,29 +10,10 @@ class Solver
         Solver();
         virtual ~Solver();
         
-        /**
-         * 
-         */
         int compute();
-
-        /**
-         *
-         */
         std::vector<Cluster> findClusters(std::vector<Node>& aNodes);
-        
-        /**
-         *
-         */
         Cluster findLongestCluster(std::vector<Cluster>& aClusters);
-
-        /**
-         * 
-         */
         int getClusterLength(Cluster& aCluster);
-
-        /**
-         * 
-         */
         int findLongestPath(Node* aNode, int aClusterSize);
 
     private:
