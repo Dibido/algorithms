@@ -1,0 +1,16 @@
+Aanpak algoritme:
+
+1. Inlezen alle data en vormen nodes, connecties tussen nodes maken. Node heeft een boolean 'hasNeighbourOfOppositeGender' (default = false), welke true wordt wanneer er een connectie wordt toegevoegd met opposite gender.
+
+2. Voor alle nodes:
+   if(NOT hasNeighbourOfOppositeGender) -> Return VERONIQUE 
+   
+/* Als er een vrouw is met geen connecties naar mannen is het duidelijk dat veronique wint. 
+De theorie/hypothese is dat ook wanneer er een man is met alleen connecties naar mannen, veronique wint. (Moet blijken of deze aanname correct is). */
+   
+3. Alle nodes indelen in clusters (Copy + Plak van 1e practicum~)
+
+4. Voor elk cluster:
+   if(NOT Cluster.perfectMatchingPossible()) -> Return VERONIQUE
+   
+5. Als we hier zijn aangekomen (en er dus alleen clusters zijn met perfectMatchingPossible()==true) betekent dit dat Mark wint.
