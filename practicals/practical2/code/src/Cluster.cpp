@@ -8,6 +8,11 @@ Cluster::~Cluster()
 {
 }
 
+bool Cluster::hasPerfectMatching()
+{
+  return false;
+}
+
 void Cluster::renumber()
 {
   for (unsigned int i = 0; i < mNodes.size(); i++)

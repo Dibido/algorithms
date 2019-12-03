@@ -1,5 +1,6 @@
 # Build dir
 practicals/practical1/code/build
+practicals/practical2/code/build
 
 ## Core latex/pdflatex auxiliary files
 *.aux

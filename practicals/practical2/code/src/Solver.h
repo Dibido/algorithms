@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <cmath>
+#include <queue>
 
 #include "Cluster.h"
 

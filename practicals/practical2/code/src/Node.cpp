@@ -4,7 +4,7 @@ Node::Node() : mId(0)
 {
 }
 
-Node::Node(int aNodeId, std::string aActorName, bool aIsMale) : mId(aNodeId), mActorName(aActorName), mIsMale(aIsMale)
+Node::Node(int aNodeId, std::string aActorName, bool aIsMale) : mId(aNodeId), mActorName(aActorName), mIsMale(aIsMale), mHasOppositeGenderNeighbour(false)
 {
 }
 
@@ -13,6 +13,7 @@ Node::Node(const Node& aNode)
     mId = aNode.getId();
     mActorName = aNode.getActorName();
     mIsMale = aNode.isMale();
+    mHasOppositeGenderNeighbour = aNode.hasOppositeGenderNeighbour();
     for(auto& lNeighbour : aNode.getNeighbours())
     {
         mNeighbours.push_back(lNeighbour);
@@ -23,6 +24,7 @@ Node::Node(const Node& aNode)
     mId = aNode.getId();
     mActorName = aNode.getActorName();
     mIsMale = aNode.isMale();
+    mHasOppositeGenderNeighbour = aNode.hasOppositeGenderNeighbour();
     mNeighbours.clear();
     for(auto& lNeighbour : aNode.getNeighbours())
     {
@@ -73,7 +75,16 @@ void Node::printNode() const
 
 void Node::addNeighbour(Node* aNode)
 {
+    if(aNode->isMale() != isMale()) // Check if it is opposite gender
+    {
+        mHasOppositeGenderNeighbour = true;
+    }
     mNeighbours.push_back(aNode);
+}
+
+void Node::setOppositeNeighbour()
+{
+    mHasOppositeGenderNeighbour = true;
 }
 
 const std::vector <Node*>& Node::getNeighbours() const
@@ -100,6 +111,11 @@ int Node::getId() const
 std::string Node::getActorName() const
 {
     return mActorName;
+}
+
+bool Node::hasOppositeGenderNeighbour() const
+{
+    return mHasOppositeGenderNeighbour;
 }
 
 bool Node::isMale() const

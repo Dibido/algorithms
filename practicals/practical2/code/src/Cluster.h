@@ -18,6 +18,8 @@ class Cluster
         int getNumberOfNodes() const;
         Node* getFirstNode();
 
+        bool hasPerfectMatching();
+
         bool operator==(const Cluster& aCluster) const;
 
         Cluster(const Cluster& aCluster);
