@@ -11,6 +11,8 @@ Node::Node(int aNodeId, std::string aActorName, bool aIsMale) : mId(aNodeId), mA
 Node::Node(const Node& aNode)
 {
     mId = aNode.getId();
+    mActorName = aNode.getActorName();
+    mIsMale = aNode.isMale();
     for(auto& lNeighbour : aNode.getNeighbours())
     {
         mNeighbours.push_back(lNeighbour);
@@ -19,6 +21,8 @@ Node::Node(const Node& aNode)
 
  Node& Node::operator=( const Node& aNode ) {
     mId = aNode.getId();
+    mActorName = aNode.getActorName();
+    mIsMale = aNode.isMale();
     mNeighbours.clear();
     for(auto& lNeighbour : aNode.getNeighbours())
     {
@@ -30,6 +34,11 @@ Node::Node(const Node& aNode)
 void Node::setNodeId(const int aNodeId)
 {
     mId = aNodeId;
+}
+
+void Node::setActorName(std::string aActorName)
+{
+    mActorName = aActorName;
 }
 
 Node::~Node()

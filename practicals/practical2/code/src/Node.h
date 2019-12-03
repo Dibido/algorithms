@@ -11,6 +11,7 @@ class Node
         virtual ~Node();
 
         void setNodeId(const int aNodeid);
+        void setActorName(std::string aActorName);
         
         void printNode() const;
         void addNeighbour(Node* aNode);

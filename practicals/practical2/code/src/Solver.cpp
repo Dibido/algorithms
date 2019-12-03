@@ -18,9 +18,7 @@ Solver::Solver()
     {
         std::string lActressName;
         input >> lActressName; // Read the name
-        Node lNode = Node(i, lActressName, false);
-        mNodes.push_back(lNode); // Create a node
-        std::cout << mNodes.at(0).getActorName() << std::endl;
+        mNodes.push_back(Node(i, lActressName, false)); // Create a node
     }
 
     for(int i = lNumberOfActors; i < (2 * lNumberOfActors); i++) // Read the actors
@@ -56,8 +54,11 @@ Solver::Solver()
                         {
                             if (lSecondActor.getActorName() == lActorNames.at(j)) // Find the actor
                             {
-                                lFirstActor.addNeighbour(&lSecondActor);
-                                lSecondActor.addNeighbour(&lFirstActor);
+                                if(!(lFirstActor == lSecondActor))
+                                {
+                                    lFirstActor.addNeighbour(&lSecondActor);
+                                    lSecondActor.addNeighbour(&lFirstActor);
+                                }
                             }
                         }
                     }
