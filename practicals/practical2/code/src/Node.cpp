@@ -75,9 +75,12 @@ void Node::printNode() const
 
 void Node::addNeighbour(Node* aNode)
 {
-    if(aNode->isMale() != isMale()) // Check if it is opposite gender
+    if(!mHasOppositeGenderNeighbour)
     {
-        mHasOppositeGenderNeighbour = true;
+      if(aNode->isMale() != isMale()) // Check if it is opposite gender
+      {
+          mHasOppositeGenderNeighbour = true;
+      }
     }
     mNeighbours.push_back(aNode);
 }

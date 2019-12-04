@@ -10,6 +10,11 @@ Cluster::~Cluster()
 
 bool Cluster::hasPerfectMatching()
 {
+  // Uneven number of nodes -> perfect matching never possible
+  if(mNodes.size() % 2 == 1)
+  {
+    return false;
+  }
   return false;
 }
 

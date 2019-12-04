@@ -18,14 +18,14 @@ Solver::Solver()
     {
         std::string lActressName;
         input >> lActressName; // Read the name
-        mNodes.push_back(Node(i, lActressName, false)); // Create a node
+        mNodes.insert(make_pair(lActressName, Node(i, lActressName, false))); // Create a node
     }
 
     for(int i = lNumberOfActors; i < (2 * lNumberOfActors); i++) // Read the actors
     {
         std::string lActorName;
         input >> lActorName; // Read the name
-        mNodes.push_back(Node(i, lActorName, true));  // Create a node
+        mNodes.insert(make_pair(lActorName, Node(i, lActorName, true)));  // Create a node
     }
 
     // Handle the movies
@@ -33,42 +33,41 @@ Solver::Solver()
     {
         std::string lMovieName;
         input >> lMovieName; // Read moviename
-        int lNumberOfActors;
+        unsigned int lNumberOfActors;
         input >> lNumberOfActors; // Read number of actors
         std::vector <std::string> lActorNames;
-        for(int i = 0; i < lNumberOfActors; i++) // Read the actors
+        for(size_t i = 0; i < lNumberOfActors; i++) // Read the actors
         {
             std::string lActorName;
             input >> lActorName;
             lActorNames.push_back(lActorName);
         }
+        
         for(size_t i = 0; i < lActorNames.size(); i++)
         {
-            for(Node& lFirstActor : mNodes)
+          auto lIt = mNodes.find(lActorNames.at(i));
+          
+            for(size_t j = i; j < lActorNames.size(); j++)
             {
-                if (lFirstActor.getActorName() == lActorNames.at(i)) // Find the actor
-                {
-                    for(size_t j = i; j < lActorNames.size(); j++)
-                    {
-                        for(Node& lSecondActor : mNodes)
-                        {
-                            if (lSecondActor.getActorName() == lActorNames.at(j)) // Find the actor
-                            {
-                                if(!(lFirstActor == lSecondActor)) // No self loops
-                                {
-                                    lFirstActor.addNeighbour(&lSecondActor);
-                                    lSecondActor.addNeighbour(&lFirstActor);
-                                }
-                            }
-                        }
-                    }
-                }
+              if(j != i)
+              {
+                auto lNeighbourIt = mNodes.find(lActorNames.at(j));
+
+                lIt->second.addNeighbour(&lNeighbourIt->second);
+                lNeighbourIt->second.addNeighbour(&lIt->second);
+              }
             }
         }
     }
-    for (auto lNode : mNodes)
+
+    for(auto lIt = mNodes.begin(); lIt != mNodes.end(); lIt++)
     {
-        lNode.printNode();
+      mNodePointers.push_back(&lIt->second);
+    }
+
+    for(auto& lIt : mNodePointers)
+    {
+     // lIt->printNode();
     }
 }
 
@@ -78,18 +77,18 @@ Solver::~Solver()
 
 std::string Solver::compute()
 {
-    for(auto lNode : mNodes)
+    for(auto& lNode : mNodePointers)
     {
-        if(lNode.hasOppositeGenderNeighbour() == false) // Check whether every node has at least one member of opposite gender
+        if(!(lNode->hasOppositeGenderNeighbour())) // Check whether every node has at least one member of opposite gender
         {
             std::cout << "NODE CAUSED NO OPPOSITE GENDER : " << std::endl;
-            lNode.printNode();
+            lNode->printNode();
             return "Veronique";
         }
     }
 
     // Find all the clusters in the input
-    mClusters = findClusters(mNodes);
+    mClusters = findClusters();
 
     // Check whether all the clusters have a perfect matching
     for(Cluster& lCluster : mClusters)
@@ -105,15 +104,27 @@ std::string Solver::compute()
     return "Mark";
 }
 
-std::vector<Cluster> Solver::findClusters(std::vector<Node>& aNodes)
+std::vector<Cluster> Solver::findClusters()
 {
     std::vector<Cluster> lClusters;
+ 
+    // First storing all our nodes in this nodeMap, so they are ordered on ID (0, 1... n) and we can store them in lNodeList.
+    std::map<int, Node*> lNodeMap;
+
+    for(unsigned int i = 0; i < mNodePointers.size(); i++)
+    {
+      lNodeMap.insert(std::make_pair(mNodePointers.at(i)->getId(),mNodePointers.at(i)));
+    }
+
     std::vector<std::pair<int,bool>> lNodeList; //used for finding the clusters, int for the id and bool for if it has been added to a cluster
 
-    // Put all the nodes in the nodelist
-    for(auto& lNode : aNodes)
+    // Put all the nodes in the nodelist, also make it so that mNodePointers are ordered (that is, .at(0) has pointer for node with id 0 etc.)
+    int i = 0;
+    for(auto lIt = lNodeMap.begin(); lIt != lNodeMap.end(); lIt++)
     {
-        lNodeList.push_back(std::pair<int, bool>(lNode.getId(), false)); // By default not in a cluster
+        lNodeList.push_back(std::pair<int, bool>(lIt->second->getId(), false)); // By default not in a cluster
+        mNodePointers.at(i) = lIt->second;
+        i++;
     }
 
     // Check the neighbours for every node and add them to a cluster
@@ -125,12 +136,13 @@ std::vector<Cluster> Solver::findClusters(std::vector<Node>& aNodes)
             Cluster lCluster;
             // Add the neighbours
             std::queue<Node*> lNodeQueue;
-            lNodeQueue.push(&aNodes.at(i));
+            lNodeQueue.push(mNodePointers.at(i));
 
             while(!lNodeQueue.empty())
             {
                 Node* lCurrentNode = lNodeQueue.front();
                 lNodeQueue.pop();
+
                 // Mark the node as handled
                 lNodeList.at(lCurrentNode->getId()).second = true;
                 lCluster.addNode(lCurrentNode);
@@ -140,15 +152,17 @@ std::vector<Cluster> Solver::findClusters(std::vector<Node>& aNodes)
                     // Node has not been seen yet
                     if(!lNodeList.at(lNeighbour->getId()).second)
                     {
-                        lNodeQueue.push(lNeighbour);
+                      lNodeQueue.push(lNeighbour);
+                      lNodeList.at(lNeighbour->getId()).second = true;
                     }
                 }
             }
             
-            lCluster.renumber();
+            //lCluster.renumber();
 
             lClusters.push_back(lCluster);
         }
     }
+
     return lClusters;
 }

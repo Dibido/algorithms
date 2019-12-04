@@ -2,6 +2,7 @@
 #include <string>
 #include <cmath>
 #include <queue>
+#include <map>
 
 #include "Cluster.h"
 
@@ -12,11 +13,19 @@ class Solver
         virtual ~Solver();
         
         std::string compute();
-        std::vector<Cluster> findClusters(std::vector<Node>& aNodes);
+        
+        // Will use mNodePointers to find the clusters.
+        std::vector<Cluster> findClusters();
 
     private:
         int mNumberOfNodes;
         int mNumberOfMovies;
-        std::vector<Node> mNodes;
+        
+        // Should not be changed in any way after constructor, or pointers in mNodePointers would get invalid.
+        std::map<std::string, Node> mNodes;
+
+        // Pointers will point to the nodes in mNodes after constructor, more convenient to iterate over.
+        std::vector<Node*> mNodePointers;
+
         std::vector<Cluster> mClusters;
 };
