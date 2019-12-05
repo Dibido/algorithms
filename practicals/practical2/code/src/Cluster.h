@@ -27,6 +27,7 @@ class Cluster
     private:
         // All the nodes in the cluster.
         std::vector<Node*> mNodes;
+
         // The longest path in the cluster.
         int mLongestPathSize;
         // The middle node of the longest path.
