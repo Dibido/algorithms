@@ -1,4 +1,5 @@
 #include <vector>
+#include <set>
 
 #include "Node.h"
 
@@ -17,8 +18,12 @@ class Cluster
         int getLongestPathSize() const;
         int getNumberOfNodes() const;
         Node* getFirstNode();
+        
 
         bool hasPerfectMatching();
+        bool isBalanced() const;
+        void setBalanced (bool aBalanced);
+        bool tryAugmentingPath();
 
         bool operator==(const Cluster& aCluster) const;
 
@@ -28,6 +33,11 @@ class Cluster
         // All the nodes in the cluster.
         std::vector<Node*> mNodes;
 
+        // The found matching in the graph
+        std::set<Node*> mMatching;
+
+        // A cluster is balanced if it has as many males as females
+        bool mIsBalanced;
         // The longest path in the cluster.
         int mLongestPathSize;
         // The middle node of the longest path.

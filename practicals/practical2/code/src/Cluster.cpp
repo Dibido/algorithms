@@ -1,6 +1,6 @@
 #include "Cluster.h"
 
-Cluster::Cluster() : mLongestPathSize(-1)
+Cluster::Cluster() : mMatching(),  mIsBalanced(true), mLongestPathSize(-1)
 {
 }
 
@@ -15,6 +15,46 @@ bool Cluster::hasPerfectMatching()
   {
     return false;
   }
+  else
+  {
+    // Try to find perfect matching
+    while (tryAugmentingPath()) // Find an augmenting path
+    {
+    }
+    // No more augmenting path
+    return (mMatching.size() == mNodes.size()); // Whether we have found a perfect matching
+  }
+}
+
+bool Cluster::tryAugmentingPath()
+{
+  // Try to find an augmenting path
+  std::vector<Node*> lMen;
+  std::vector<Node*> lWomen;
+
+  for(auto& lNode : mNodes)
+  {
+    if(lNode->isMale())
+    {
+      lMen.push_back(lNode);
+    }
+    else
+    {
+      lWomen.push_back(lNode);
+    }
+  }
+
+  for(auto& lWoman : lWomen)
+  {
+    std::vector<Node*> lTree;
+    if(mMatching.find(lWoman) != mMatching.end()) // Check if the node is in the matching
+    {
+      // Add the nodes to the tree
+      lTree.push_back(lWoman);
+      // Add the neighbours to the tree
+    }
+  }
+
   return false;
 }
 
@@ -49,6 +89,16 @@ Node& Cluster::getMiddleNode()
 const std::vector<Node*>& Cluster::getNodes() const
 {
     return mNodes;
+}
+
+bool Cluster::isBalanced() const
+{
+  return mIsBalanced;
+}
+
+void Cluster::setBalanced (bool aBalanced)
+{
+  mIsBalanced = aBalanced;
 }
 
 bool Cluster::operator==(const Cluster& aCluster) const
