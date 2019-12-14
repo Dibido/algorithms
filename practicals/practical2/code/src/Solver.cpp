@@ -83,7 +83,7 @@ std::string Solver::compute()
     for(auto& lNode : mNodePointers)
     {
         // Check whether every node has at least one member (of opposite gender)
-        if(!(lNode->getNeighbours().size() == 0))
+        if((lNode->getNeighbours().size() == 0))
         {
             std::cout << "NODE CAUSED NO OPPOSITE GENDER : " << std::endl;
             lNode->printNode();
@@ -99,7 +99,7 @@ std::string Solver::compute()
     {
         if (!lCluster.isBalanced())
         {
-            std::cout << "CLUSTER CAUSED NO INBALANCE." << std::endl;
+            std::cout << "CLUSTER CAUSED INBALANCE." << std::endl;
             return "Veronique";
         }
     }
@@ -184,6 +184,7 @@ std::vector<Cluster> Solver::findClusters()
                     lBalance--;
                 }
             }
+            std::cout << "Balance : " << lBalance << std::endl;
             if (lBalance != 0)
             {
                 lCluster.setBalanced(false);

@@ -10,20 +10,48 @@ Cluster::~Cluster()
 
 bool Cluster::hasPerfectMatching()
 {
-  // Uneven number of nodes -> perfect matching never possible
-  if(mNodes.size() % 2 == 1)
+  std::vector<int> graph[mNodes.size()];
+
+  renumber();
+
+  int j = 0;
+  for(size_t i = 0; i < mNodes.size(); i++)
   {
-    return false;
-  }
-  else
-  {
-    // Try to find perfect matching
-    while (tryAugmentingPath()) // Find an augmenting path
+    if(mNodes.at(i)->isMale())
     {
+      for(auto& lNeighbour : mNodes.at(i)->getNeighbours())
+      {
+        graph[j].push_back(lNeighbour->getId());
+      }
+      j++;
     }
-    // No more augmenting path
-    return (mMatching.size() == mNodes.size()); // Whether we have found a perfect matching
   }
+
+  for(size_t i = 0; i < mNodes.size(); i++)
+  {
+    std::cout << "Vector : " << i << std::endl;
+    for(auto& lNeighbour : graph[i])
+    std::cout << lNeighbour << std::endl;
+  }
+
+
+
+  return false;
+
+  // // Uneven number of nodes -> perfect matching never possible
+  // if(mNodes.size() % 2 == 1)
+  // {
+  //   return false;
+  // }
+  // else
+  // {
+  //   // Try to find perfect matching
+  //   while (tryAugmentingPath()) // Find an augmenting path
+  //   {
+  //   }
+  //   // No more augmenting path
+  //   return (mMatching.size() == mNodes.size()); // Whether we have found a perfect matching
+  // }
 }
 
 bool Cluster::tryAugmentingPath()
@@ -110,6 +138,7 @@ Cluster::Cluster(const Cluster& aCluster)
 {
   mLongestPathSize = aCluster.mLongestPathSize;
   mMiddleNode = aCluster.mMiddleNode;
+  mIsBalanced = aCluster.mIsBalanced;
 
   for(auto& lNode : aCluster.mNodes)
   {
