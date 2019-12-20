@@ -33,9 +33,6 @@ class Cluster
         // All the nodes in the cluster.
         std::vector<Node*> mNodes;
 
-        // The found matching in the graph
-        std::set<Node*> mMatching;
-
         // A cluster is balanced if it has as many males as females
         bool mIsBalanced;
         // The longest path in the cluster.

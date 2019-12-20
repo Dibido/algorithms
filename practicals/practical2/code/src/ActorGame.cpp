@@ -10,7 +10,7 @@ int main()
     Solver lSolver;
 
     std::string lSolution = lSolver.compute();
- 
+   
     std::cout << lSolution << std::endl;
     return 0;
 }

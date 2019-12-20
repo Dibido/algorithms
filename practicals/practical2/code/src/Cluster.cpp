@@ -1,6 +1,7 @@
 #include "Cluster.h"
+#include "HopcroftKarp.h"
 
-Cluster::Cluster() : mMatching(),  mIsBalanced(true), mLongestPathSize(-1)
+Cluster::Cluster() : mIsBalanced(true), mLongestPathSize(-1)
 {
 }
 
@@ -10,80 +11,58 @@ Cluster::~Cluster()
 
 bool Cluster::hasPerfectMatching()
 {
-  std::vector<int> graph[mNodes.size()];
-
-  renumber();
-
-  int j = 0;
-  for(size_t i = 0; i < mNodes.size(); i++)
+  // Uneven number of nodes -> perfect matching never possible
+  if(mNodes.size() % 2 == 1)
   {
-    if(mNodes.at(i)->isMale())
-    {
-      for(auto& lNeighbour : mNodes.at(i)->getNeighbours())
-      {
-        graph[j].push_back(lNeighbour->getId());
-      }
-      j++;
-    }
+    return false;
   }
 
-  for(size_t i = 0; i < mNodes.size(); i++)
-  {
-    std::cout << "Vector : " << i << std::endl;
-    for(auto& lNeighbour : graph[i])
-    std::cout << lNeighbour << std::endl;
-  }
+  // Transforming our current data structures/node numbering so that it fits the structure our hopcroftkarp expects:
 
+  int lNumberOfMales = 0;
+  int lNumberOfFemales = 0;
 
-
-  return false;
-
-  // // Uneven number of nodes -> perfect matching never possible
-  // if(mNodes.size() % 2 == 1)
-  // {
-  //   return false;
-  // }
-  // else
-  // {
-  //   // Try to find perfect matching
-  //   while (tryAugmentingPath()) // Find an augmenting path
-  //   {
-  //   }
-  //   // No more augmenting path
-  //   return (mMatching.size() == mNodes.size()); // Whether we have found a perfect matching
-  // }
-}
-
-bool Cluster::tryAugmentingPath()
-{
-  // Try to find an augmenting path
-  std::vector<Node*> lMen;
-  std::vector<Node*> lWomen;
+  int lMaleId = 1;
+  int lFemaleId = 1;
 
   for(auto& lNode : mNodes)
   {
     if(lNode->isMale())
     {
-      lMen.push_back(lNode);
+      lNode->setNodeId(lMaleId);
+      lMaleId++;
+      lNumberOfMales++;
     }
     else
     {
-      lWomen.push_back(lNode);
+      lNode->setNodeId(lFemaleId);
+      lFemaleId++;
+      lNumberOfFemales++;
     }
   }
 
-  for(auto& lWoman : lWomen)
+  // No maximal matching if unequal number of males/females
+  if(lNumberOfFemales != lNumberOfMales)
   {
-    std::vector<Node*> lTree;
-    if(mMatching.find(lWoman) != mMatching.end()) // Check if the node is in the matching
+    return false;
+  }
+  
+  HopcroftKarp lHopcroftKarp(lNumberOfMales, lNumberOfFemales);
+
+  // We will consider the males on left side of hopcroft karp. Adding neighbours for the males:
+  for(auto& lNode : mNodes)
+  {
+    if(lNode->isMale())
     {
-      // Add the nodes to the tree
-      lTree.push_back(lWoman);
-      // Add the neighbours to the tree
+      for(auto& lNeighbour : lNode->getNeighbours())
+      {
+        lHopcroftKarp.addEdge(lNode->getId(), lNeighbour->getId());
+      }
     }
   }
-
-  return false;
+  
+  // Each male (and female) should be matched if perfect matching exists.
+  return (lHopcroftKarp.computeMaximumMatching() == lNumberOfMales);
 }
 
 void Cluster::renumber()
@@ -117,16 +96,6 @@ Node& Cluster::getMiddleNode()
 const std::vector<Node*>& Cluster::getNodes() const
 {
     return mNodes;
-}
-
-bool Cluster::isBalanced() const
-{
-  return mIsBalanced;
-}
-
-void Cluster::setBalanced (bool aBalanced)
-{
-  mIsBalanced = aBalanced;
 }
 
 bool Cluster::operator==(const Cluster& aCluster) const
@@ -165,4 +134,14 @@ Node* Cluster::getFirstNode()
   }
 
   return mNodes.at(0);
+}
+
+void Cluster::setBalanced(bool aBalanced)
+{
+  mIsBalanced = aBalanced;
+}
+
+bool Cluster::isBalanced() const
+{
+  return mIsBalanced;
 }

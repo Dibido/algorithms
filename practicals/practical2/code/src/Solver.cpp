@@ -1,4 +1,7 @@
 #include "Solver.h"
+
+#include "HopcroftKarp.h"
+
 #include <iostream>
 #include <fstream>
 #include <cassert>
@@ -85,8 +88,8 @@ std::string Solver::compute()
         // Check whether every node has at least one member (of opposite gender)
         if((lNode->getNeighbours().size() == 0))
         {
-            std::cout << "NODE CAUSED NO OPPOSITE GENDER : " << std::endl;
-            lNode->printNode();
+            //std::cout << "NODE CAUSED NO OPPOSITE GENDER : " << std::endl;
+            //lNode->printNode();
             return "Veronique";
         }
     }
@@ -94,21 +97,22 @@ std::string Solver::compute()
     // Find all the clusters in the input
     mClusters = findClusters();
 
-    // Check whether all the clusters have a perfect matching
-    for(Cluster& lCluster : mClusters)
+    // Check if maybe any of the clusters is unbalanced
+    for(auto& lCluster : mClusters)
     {
-        if (!lCluster.isBalanced())
-        {
-            std::cout << "CLUSTER CAUSED INBALANCE." << std::endl;
-            return "Veronique";
-        }
+      if(!lCluster.isBalanced())
+      {
+        //std::cout << "Not balanced, so veronique " << std::endl;
+        return "Veronique";
+      }
     }
 
+    // Check whether all the clusters have a perfect matching, if no perfect matching veronique wins
     for(Cluster& lCluster : mClusters)
     {
         if (!lCluster.hasPerfectMatching())
         {
-            std::cout << "CLUSTER CAUSED NO PERFECT MATCHING." << std::endl;
+            //std::cout << "CLUSTER CAUSED NO PERFECT MATCHING." << std::endl;
             return "Veronique";
         }
     }
@@ -151,6 +155,9 @@ std::vector<Cluster> Solver::findClusters()
             std::queue<Node*> lNodeQueue;
             lNodeQueue.push(mNodePointers.at(i));
 
+            // Will keep track if number of added males/females is equal in the end. Adding male is +1, female -1.
+            int lBalance = 0;
+
             while(!lNodeQueue.empty())
             {
                 Node* lCurrentNode = lNodeQueue.front();
@@ -159,6 +166,8 @@ std::vector<Cluster> Solver::findClusters()
                 // Mark the node as handled
                 lNodeList.at(lCurrentNode->getId()).second = true;
                 lCluster.addNode(lCurrentNode);
+
+                lBalance += lCurrentNode->isMale() ? 1 : -1;
 
                 for(auto lNeighbour : lCurrentNode->getNeighbours())
                 {
@@ -171,24 +180,13 @@ std::vector<Cluster> Solver::findClusters()
                 }
             }
             
-            //lCluster.renumber();
-            int lBalance = 0;
-            for(auto& lNode : lCluster.getNodes())
-            {
-                if (lNode->isMale())
-                {
-                    lBalance++;
-                }
-                else
-                {
-                    lBalance--;
-                }
-            }
-            std::cout << "Balance : " << lBalance << std::endl;
+            //std::cout << "Balance : " << lBalance << std::endl;
+
             if (lBalance != 0)
             {
                 lCluster.setBalanced(false);
             }
+
             lClusters.push_back(lCluster);
         }
     }
