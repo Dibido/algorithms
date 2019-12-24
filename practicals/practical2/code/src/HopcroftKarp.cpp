@@ -44,7 +44,6 @@ int HopcroftKarp::computeMaximumMatching()
       }
     }
   }
-
   return lMaxMatching;
 }
 
