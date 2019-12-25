@@ -67,13 +67,18 @@ void Node::printNode() const
 
     for(unsigned int i = 0; i < mNeighbours.size(); i++)
     {
-        std::cout << "\t" << mId << " - " << mNeighbours.at(i)->mId << std::endl;
+        std::cout << "\t" << mId << " - " << mNeighbours.at(i)->getActorName() << std::endl;
     }
 }
 
 void Node::addNeighbour(Node* aNode)
 {
-    mNeighbours.push_back(aNode);
+    //If it has not yet been inserted, add the neighbour
+    #include <algorithm>
+    if(std::find(mNeighbours.begin(), mNeighbours.end(), aNode) == mNeighbours.end())
+    {
+        mNeighbours.push_back(aNode);
+    }
 }
 
 const std::vector <Node*>& Node::getNeighbours() const

@@ -43,8 +43,6 @@ Solver::Solver()
             lActorNames.push_back(lActorName);
         }
         
-        // auto start = std::chrono::high_resolution_clock::now();
-
         for(size_t i = 0; i < lActorNames.size(); i++)
         {
           auto lIt = mNodes.find(lActorNames.at(i));
@@ -62,14 +60,7 @@ Solver::Solver()
                 }
             }
         }
-
-        // auto end = std::chrono::high_resolution_clock::now(); 
-        // auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-        // std::cout << duration.count() << " millis to handle the movies" << std::endl;
     }
-
-
-    
 
     for(auto lIt = mNodes.begin(); lIt != mNodes.end(); lIt++)
     {
@@ -105,9 +96,7 @@ std::string Solver::compute()
         return "Veronique";
       }
     }
-
     // Check whether all the clusters have a perfect matching, if no perfect matching veronique wins
-     
     for(Cluster& lCluster : mClusters)
     {
         if (!lCluster.hasPerfectMatching())
@@ -116,8 +105,6 @@ std::string Solver::compute()
             return "Veronique";
         }
     }
-    
-
     // All the clusters have a perfect matching, thus Mark wins.
     return "Mark";
 }
@@ -127,7 +114,7 @@ std::vector<Cluster> Solver::findClusters()
     std::vector<Cluster> lClusters;
  
     // First storing all our nodes in this nodeMap, so they are ordered on ID (0, 1... n) and we can store them in lNodeList.
-    std::unordered_map<int, Node*> lNodeMap;
+    std::map<int, Node*> lNodeMap;
 
     for(unsigned int i = 0; i < mNodePointers.size(); i++)
     {
@@ -181,8 +168,6 @@ std::vector<Cluster> Solver::findClusters()
                 }
             }
             
-            //std::cout << "Balance : " << lBalance << std::endl;
-
             if (lBalance != 0)
             {
                 lCluster.setBalanced(false);
