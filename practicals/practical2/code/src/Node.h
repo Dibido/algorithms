@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <unordered_set>
 
 class Node
 {
@@ -36,4 +37,8 @@ class Node
         std::string mActorName;
         bool mIsMale;                                    
         std::vector<Node*> mNeighbours;
+
+        // This is used for performance gains, previously we did a mNeighbours.find() to check if a neighbour already existed.
+        // Now we use this unordered set
+        std::unordered_set<int> mNeighbourIds;
 };

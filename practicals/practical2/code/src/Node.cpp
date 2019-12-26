@@ -1,4 +1,5 @@
 #include "Node.h"
+#include <algorithm>
 
 Node::Node() : mId(0)
 {
@@ -17,6 +18,8 @@ Node::Node(const Node& aNode)
     {
         mNeighbours.push_back(lNeighbour);
     }
+
+    mNeighbourIds = aNode.mNeighbourIds;
 }
 
  Node& Node::operator=( const Node& aNode ) {
@@ -28,6 +31,7 @@ Node::Node(const Node& aNode)
     {
         mNeighbours.push_back(lNeighbour);
     }
+
     return *this;
   }
 
@@ -64,37 +68,24 @@ void Node::printNode() const
     
     std::cout << "Id : " << mId << std::endl;
     std::cout << "Name : " << mActorName << " [" << lSex << "]" << std::endl;
-
-    for(unsigned int i = 0; i < mNeighbours.size(); i++)
-    {
-        std::cout << "\t" << mId << " - " << mNeighbours.at(i)->getActorName() << std::endl;
-    }
 }
 
 void Node::addNeighbour(Node* aNode)
 {
-    //If it has not yet been inserted, add the neighbour
-    #include <algorithm>
-    if(std::find(mNeighbours.begin(), mNeighbours.end(), aNode) == mNeighbours.end())
+    //If it has not yet been inserted, add the neighbour (also add this to aNode as a neighbour)
+    if(mNeighbourIds.find(aNode->getId()) == mNeighbourIds.end())
     {
+        mNeighbourIds.insert(aNode->getId());
+        aNode->mNeighbourIds.insert(aNode->getId());
+
         mNeighbours.push_back(aNode);
+        aNode->mNeighbours.push_back(this);
     }
 }
 
 const std::vector <Node*>& Node::getNeighbours() const
 {
     return mNeighbours;
-}
-
-void Node::removeNeighbour(Node* aNode)
-{
-    for(unsigned int i = 0; i < mNeighbours.size(); i++)
-    {
-        if(mNeighbours.at(i)->getId() == aNode->getId())
-        {
-            mNeighbours.erase(mNeighbours.begin()+i);
-        }
-    } 
 }
 
 int Node::getId() const

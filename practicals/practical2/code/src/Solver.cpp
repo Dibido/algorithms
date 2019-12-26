@@ -6,9 +6,16 @@
 #include <fstream>
 #include <string>
 #include <chrono>
+//#include "Stopwatch.hpp"
 
 Solver::Solver()
 {
+
+    //namespace sw = stopwatch;
+
+    //  sw::Stopwatch lWatch;
+    //sw::Stopwatch lWatch2;
+
     auto& input = std::cin;
     input >> mNumberOfNodes >> mNumberOfMovies;
 
@@ -26,9 +33,19 @@ Solver::Solver()
         mNodes.insert(make_pair(lActorName, Node(i, lActorName, true)));  // Create a node
     }
 
+    //std::cout << "Creating all nodes took: " << lWatch.lap() << std::endl;
+
+        //    unsigned long lMillis = 0;
+          //  unsigned long lMillis2 = 0;
+         //   unsigned long lMillis3 = 0;
+         //   unsigned long lMillis4 = 0;
+
     // Handle the movies
     for(int i = 0; i < mNumberOfMovies; i++)
     {
+
+        //std::cout << "After " << i << " movies time elapsed: " << lWatch() << std::endl;
+  
         std::string lMovieName;
         input >> lMovieName; // Read moviename
         unsigned int lNumberOfActors;
@@ -43,29 +60,52 @@ Solver::Solver()
             lActorNames.push_back(lActorName);
         }
         
+       // lWatch.lap<sw::mus>();
+
+        // For each actor
         for(size_t i = 0; i < lActorNames.size(); i++)
         {
+          //lWatch2.lap<sw::mus>();
           auto lIt = mNodes.find(lActorNames.at(i));
+          //lMillis3 += lWatch2.lap<sw::mus>();
+          
+            // Add connections to the actors listed after it
             for(size_t j = i; j < lActorNames.size(); j++)
             {
                 if(j != i)
                 {
+                  //  lWatch2.lap<sw::mus>();
                     auto lNeighbourIt = mNodes.find(lActorNames.at(j));
+                    //lMillis3 += lWatch2.lap<sw::mus>();
+                    
                     // Only add neighbour if it has the opposite gender
                     if(lIt->second.isMale() != lNeighbourIt->second.isMale())
                     {
-                        lIt->second.addNeighbour(&lNeighbourIt->second);
-                        lNeighbourIt->second.addNeighbour(&lIt->second);
+                      //  lWatch2.lap<sw::mus>();
+                      lIt->second.addNeighbour(&lNeighbourIt->second);
+                      // lNeighbourIt->second.addNeighbour(&lIt->second); IS ALSO DONE NOW IN ADDNEIGHBOUR!
+                      //  lMillis2 += lWatch2.lap<sw::mus>();
                     }
                 }
+                
             }
+            
         }
+     // lMillis+= lWatch.lap<sw::mus>();
     }
+
+      // std::cout << "Last forloop in total took: " << lMillis << std::endl;
+        //   std::cout << "lMillis2: " << lMillis2 << std::endl;
+         //  std::cout << "lMillis3: " << lMillis3 << std::endl;
+
+   // std::cout << "Handling all movies took: " << lWatch.lap() << std::endl;
 
     for(auto lIt = mNodes.begin(); lIt != mNodes.end(); lIt++)
     {
       mNodePointers.push_back(&lIt->second);
     }
+
+    //std::cout << "Pushbacking mNodes into mNodePointers took: " << lWatch.lap() << std::endl;
 }
 
 Solver::~Solver()
@@ -92,7 +132,6 @@ std::string Solver::compute()
     {
       if(!lCluster.isBalanced())
       {
-        // std::cout << "Not balanced, so veronique wins" << std::endl;
         return "Veronique";
       }
     }

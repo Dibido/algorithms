@@ -5,19 +5,19 @@
 #include <chrono>
 
 #include "Solver.h"
+//#include "Stopwatch.hpp"
 
 int main()
 {
     // auto start = std::chrono::high_resolution_clock::now();
+    //namespace sw = stopwatch;
+
+    //sw::Stopwatch lWatch;
 
     Solver lSolver;
-    
-    // auto end = std::chrono::high_resolution_clock::now(); 
-    // auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    // std::cout << duration.count() << " millis to read input" << std::endl;
 
     std::string lSolution = lSolver.compute();
-   
+
     std::cout << lSolution << std::endl;
     return 0;
 }
