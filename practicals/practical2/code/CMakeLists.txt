@@ -11,4 +11,4 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 #set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
-add_executable(ActorGame src/ActorGame.cpp src/Solver.cpp src/Node.cpp src/Cluster.cpp src/HopcroftKarp.cpp src/Stopwatch.hpp)
+add_executable(ActorGame src/ActorGame.cpp src/Solver.cpp src/Node.cpp src/Cluster.cpp src/HopcroftKarp.cpp)

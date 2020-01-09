@@ -33,7 +33,6 @@ int HopcroftKarp::computeMaximumMatching()
   // As long as BFS finds an augmenting path
   while(BFS())
   {
-    //std::cout << "BFS returned true " << std::endl;
     // For every left vertex:
     for(unsigned int i = 1; i < mLeftMatchings.size(); i++)
     {
@@ -49,7 +48,6 @@ int HopcroftKarp::computeMaximumMatching()
 
 bool HopcroftKarp::BFS() 
 { 
-    //std::cout << " start BFS " << std::endl;
     // Will contain vertices from left side only.
     std::queue<int> lQueue; 
   
@@ -74,7 +72,6 @@ bool HopcroftKarp::BFS()
    
     while (!lQueue.empty()) 
     { 
-      //std::cout << "Dequeing" << std::endl;
         // Dequeue a left vertex 
         int lLeftNode = lQueue.front(); 
         lQueue.pop(); 

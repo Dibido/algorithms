@@ -6,16 +6,9 @@
 #include <fstream>
 #include <string>
 #include <chrono>
-//#include "Stopwatch.hpp"
 
 Solver::Solver()
 {
-
-    //namespace sw = stopwatch;
-
-    //  sw::Stopwatch lWatch;
-    //sw::Stopwatch lWatch2;
-
     auto& input = std::cin;
     input >> mNumberOfNodes >> mNumberOfMovies;
 
@@ -33,19 +26,9 @@ Solver::Solver()
         mNodes.insert(make_pair(lActorName, Node(i, lActorName, true)));  // Create a node
     }
 
-    //std::cout << "Creating all nodes took: " << lWatch.lap() << std::endl;
-
-        //    unsigned long lMillis = 0;
-          //  unsigned long lMillis2 = 0;
-         //   unsigned long lMillis3 = 0;
-         //   unsigned long lMillis4 = 0;
-
     // Handle the movies
     for(int i = 0; i < mNumberOfMovies; i++)
     {
-
-        //std::cout << "After " << i << " movies time elapsed: " << lWatch() << std::endl;
-  
         std::string lMovieName;
         input >> lMovieName; // Read moviename
         unsigned int lNumberOfActors;
@@ -91,21 +74,12 @@ Solver::Solver()
             }
             
         }
-     // lMillis+= lWatch.lap<sw::mus>();
     }
-
-      // std::cout << "Last forloop in total took: " << lMillis << std::endl;
-        //   std::cout << "lMillis2: " << lMillis2 << std::endl;
-         //  std::cout << "lMillis3: " << lMillis3 << std::endl;
-
-   // std::cout << "Handling all movies took: " << lWatch.lap() << std::endl;
 
     for(auto lIt = mNodes.begin(); lIt != mNodes.end(); lIt++)
     {
       mNodePointers.push_back(&lIt->second);
     }
-
-    //std::cout << "Pushbacking mNodes into mNodePointers took: " << lWatch.lap() << std::endl;
 }
 
 Solver::~Solver()
@@ -119,8 +93,6 @@ std::string Solver::compute()
         // Check whether every node has at least one member (of opposite gender)
         if((lNode->getNeighbours().size() == 0))
         {
-            // std::cout << "NODE CAUSED NO OPPOSITE GENDER : " << std::endl;
-            // lNode->printNode();
             return "Veronique";
         }
     }
@@ -140,7 +112,6 @@ std::string Solver::compute()
     {
         if (!lCluster.hasPerfectMatching())
         {
-            // std::cout << "CLUSTER CAUSED NO PERFECT MATCHING." << std::endl;
             return "Veronique";
         }
     }
